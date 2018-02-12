@@ -4,12 +4,15 @@ import java.io.IOException;
 
 import main.Client;
 import main.Console;
-import message.BytePackerClass;
+import message.BytePacker;
+import message.ByteUnpacker;
 
 public class CreateAccountService extends Service {
 	
 	
-	public CreateAccountService(){}
+	public CreateAccountService(){
+		super(null);
+	}
 	
 	/***
 	 * Account creation: 
@@ -24,7 +27,7 @@ public class CreateAccountService extends Service {
 		String currency = console.askForString("Specify currency type:");
 		double init_balance = console.askForDouble("Enter initial balance:");
 		int message_id = client.getMessage_id();
-		BytePackerClass packer = new BytePackerClass.Builder()
+		BytePacker packer = new BytePacker.Builder()
 								.setProperty("ServiceId", client.CREATE_ACCOUNT)
 								.setProperty("messageId", message_id)
 								.setProperty("Name", name)
@@ -33,6 +36,18 @@ public class CreateAccountService extends Service {
 								.setProperty("Balance", init_balance)
 								.build();
 		client.send(packer);
+		
+		ByteUnpacker.UnpackedMsg unpackedMsg = receivalProcedure(client, packer, message_id);
+		if(checkStatus(unpackedMsg)){
+			String accNum = unpackedMsg.getString("REPLY");
+			Console.println("Account successfully created.");
+			Console.println("Account number: " + accNum);	
+		}
+		else{
+			Console.println("Account create failed");
+		}
+		
+		
 		
 		
 	}

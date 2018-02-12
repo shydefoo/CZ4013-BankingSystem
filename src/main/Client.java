@@ -1,13 +1,15 @@
 package main;
 
 import java.io.IOException;
+import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.HashMap;
 
-import message.BytePackerClass;
+import message.BytePacker;
 import services.Service;
 import socket.NormalSocket;
 import socket.Socket;
@@ -17,6 +19,7 @@ public class Client {
 	public static final int CLOSE_ACCOUNT = 1;
 	public static final int MAKE_DEPOSIT = 2;
 	public static final int MAKE_WITHDRAWL = 3;
+	public static final int BUFFER_SIZE = 2048;
 	
 	private Socket socket = null;
 	private HashMap<Integer, Service> idToServiceMap; /*Hashmap containing the serviceId and corresponding service*/
@@ -24,6 +27,8 @@ public class Client {
 	private int serverPortNumber = 0;
 	private InetAddress InetIpAddress = null;
 	private int message_id = 0;
+	//buffer
+    private byte[] buffer = new byte[BUFFER_SIZE];
 	
 	
 	
@@ -56,8 +61,20 @@ public class Client {
 			service.executeRequest(console, this);
 		}
 	}
-	public void send(BytePackerClass packer) throws IOException{
+	public void send(BytePacker packer) throws IOException{
 		this.socket.send(packer, this.InetIpAddress, this.serverPortNumber);
+	}
+	
+	public DatagramPacket receive() throws IOException{
+		clearBuffer();
+		DatagramPacket p = new DatagramPacket(buffer,buffer.length);
+		this.socket.receive(p);
+		return p;
+		
+	}
+	
+	public void clearBuffer(){
+		 Arrays.fill(buffer,(byte) 0);
 	}
 	
 	

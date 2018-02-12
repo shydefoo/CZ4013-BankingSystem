@@ -6,7 +6,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 
 import main.Console;
-import message.BytePackerClass;
+import message.BytePacker;
 
 public class NormalSocket implements Socket {
 	
@@ -17,7 +17,7 @@ public class NormalSocket implements Socket {
 	}
 	
 	@Override
-	public void send(BytePackerClass msg, InetAddress address, int port) throws IOException {
+	public void send(BytePacker msg, InetAddress address, int port) throws IOException {
 		Console.debug("Sending message");
 		byte[] message = msg.getByteArray();
 		DatagramPacket p = new DatagramPacket(message, message.length,address, port);

@@ -11,11 +11,11 @@ import java.util.HashMap;
  * @author Shide
  *
  */
-public class BytePackerClass {
+public class BytePacker {
 	private ArrayList<String> properties;
 	private HashMap<String, Object> propToValue;
 	
-	public BytePackerClass(){
+	public BytePacker(){
 		properties = new ArrayList<>();
 		propToValue = new HashMap<>();
 		
@@ -124,10 +124,10 @@ public class BytePackerClass {
 	 * 
 	 */
 	public static class Builder{
-		private BytePackerClass packer;
+		private BytePacker packer;
 		
 		public Builder(){
-			packer = new BytePackerClass();
+			packer = new BytePacker();
 		}
 		
 		public Builder setProperty(String key, int value){
@@ -147,7 +147,7 @@ public class BytePackerClass {
 			return this;
 		}
 		
-		public BytePackerClass build(){
+		public BytePacker build(){
 			return packer;
 		}
 	}

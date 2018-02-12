@@ -5,16 +5,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class ByteUnpackerClass {
+public class ByteUnpacker {
 	private ArrayList<String> properties;
 	private HashMap <String, TYPE> propToValue;
 	
-	public ByteUnpackerClass(){
+	public ByteUnpacker(){
 		properties = new ArrayList<>();
 		propToValue = new HashMap<>();
 	}
 	
-	public ByteUnpackerClass defineComponents(ByteUnpackerClass unpacker){
+	public ByteUnpacker defineComponents(ByteUnpacker unpacker){
 		if(unpacker!=null){
 			properties.addAll(unpacker.properties);
 			propToValue.putAll(unpacker.propToValue);
@@ -28,7 +28,7 @@ public class ByteUnpackerClass {
 	 * @param data
 	 * @return
 	 */
-	public Result parseByteArray(byte[] data){
+	public UnpackedMsg parseByteArray(byte[] data){
 		int offset = 0;
 		HashMap<String, Object> map = new HashMap<>();
 		try{
@@ -58,7 +58,7 @@ public class ByteUnpackerClass {
                     break;
 				}
 			}
-			Result result = new Result(map);
+			UnpackedMsg result = new UnpackedMsg(map);
 			return result;
 		}catch(Exception e){
 			return null;
@@ -101,10 +101,10 @@ public class ByteUnpackerClass {
 
 	
 	
-	public static class Result{
+	public static class UnpackedMsg{
 		private HashMap<String, Object> map;
 		
-		public Result(HashMap<String,Object> map){
+		public UnpackedMsg(HashMap<String,Object> map){
 			this.map = map;
 		}
 		
@@ -148,10 +148,10 @@ public class ByteUnpackerClass {
         INTEGER, DOUBLE, STRING, BYTE_ARRAY, ONE_BYTE_INT
     }
 	
-	public class Builder{
-		private ByteUnpackerClass unpacker;
+	public static class Builder{
+		private ByteUnpacker unpacker;
 		public Builder(){
-			unpacker = new ByteUnpackerClass();
+			unpacker = new ByteUnpacker();
 			
 		}
 		public Builder setType(String property, TYPE type){
@@ -159,7 +159,7 @@ public class ByteUnpackerClass {
 			unpacker.propToValue.put(property, type);
 			return this;
 		}
-		public ByteUnpackerClass build(){
+		public ByteUnpacker build(){
 			return unpacker;
 		}
 	}
