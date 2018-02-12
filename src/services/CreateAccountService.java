@@ -46,10 +46,6 @@ public class CreateAccountService extends Service {
 		else{
 			Console.println("Account create failed");
 		}
-		
-		
-		
-		
 	}
 
 }
