@@ -147,4 +147,20 @@ public class ByteUnpackerClass {
 	public enum TYPE {
         INTEGER, DOUBLE, STRING, BYTE_ARRAY, ONE_BYTE_INT
     }
+	
+	public class Builder{
+		private ByteUnpackerClass unpacker;
+		public Builder(){
+			unpacker = new ByteUnpackerClass();
+			
+		}
+		public Builder setType(String property, TYPE type){
+			unpacker.properties.add(property);
+			unpacker.propToValue.put(property, type);
+			return this;
+		}
+		public ByteUnpackerClass build(){
+			return unpacker;
+		}
+	}
 }

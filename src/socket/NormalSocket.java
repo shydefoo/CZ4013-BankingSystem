@@ -1,30 +1,43 @@
 package socket;
 
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
+import main.Console;
 import message.BytePackerClass;
 
 public class NormalSocket implements Socket {
 	
 	private DatagramSocket socket;
 	
+	public NormalSocket(DatagramSocket socket){
+		this.socket = socket;
+	}
+	
 	@Override
-	public void send(BytePackerClass msg, InetAddress address, int port) {
-		// TODO Auto-generated method stub
+	public void send(BytePackerClass msg, InetAddress address, int port) throws IOException {
+		Console.debug("Sending message");
+		byte[] message = msg.getByteArray();
+		DatagramPacket p = new DatagramPacket(message, message.length,address, port);
+		send(p);
 		return;
 	}
 
 	@Override
-	public void receive(DatagramPacket p) {
+	public void receive (DatagramPacket p) throws IOException {
 		// TODO Auto-generated method stub
+		this.socket.receive(p);
+		Console.debug("Receiving packet from server");
 		return;
 	}
 
 	@Override
 	public void close() {
+		Console.debug("Closing socket");
 		// TODO Auto-generated method stub
+		this.socket.close();
 		return;
 	}
 
@@ -41,7 +54,10 @@ public class NormalSocket implements Socket {
 	public void setSocket(DatagramSocket socket) {
 		this.socket = socket;
 	}
-
+	
+	public void send(DatagramPacket p) throws IOException{
+		this.socket.send(p);
+	}
 	
 	
 }

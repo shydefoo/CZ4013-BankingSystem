@@ -1,3 +1,4 @@
+package main;
 
 
 public class Application {
@@ -5,6 +6,10 @@ public class Application {
 		String string = "apple";
 		byte[] x = string.getBytes();
 		System.out.println(x.length);
+		
+		double f = 125.55;
+		
+		
 	}
 	static void  binary(int num)
 	{

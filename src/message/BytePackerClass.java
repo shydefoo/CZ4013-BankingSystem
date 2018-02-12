@@ -147,7 +147,7 @@ public class BytePackerClass {
 			return this;
 		}
 		
-		public BytePackerClass Build(){
+		public BytePackerClass build(){
 			return packer;
 		}
 	}
