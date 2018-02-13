@@ -142,6 +142,10 @@ public class BytePacker {
 			return set(key, string);
 		}
 		
+		public Builder setProperty(String key, OneByteInt value){
+			return set(key,value);
+		}
+		
 		public Builder set(String key, Object value){
 			packer.setValue(key,value);
 			return this;

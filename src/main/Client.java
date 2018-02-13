@@ -39,7 +39,6 @@ public class Client {
 		this.serverIpAddress = ipAddress;
 		this.InetIpAddress = InetAddress.getByName(this.serverIpAddress);
 		this.socket = new NormalSocket(new DatagramSocket());
-		
 	}
 	
 	public int getMessage_id() {

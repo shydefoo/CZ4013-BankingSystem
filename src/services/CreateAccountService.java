@@ -26,7 +26,7 @@ public class CreateAccountService extends Service {
 		int pin = console.askForInteger("Input your 6 digit pin-number:");
 		String currency = console.askForString("Specify currency type:");
 		double init_balance = console.askForDouble("Enter initial balance:");
-		int message_id = client.getMessage_id();
+		int message_id = client.getMessage_id();	/*This should only be called once for each executeRequest as the message_id will be incremented each time  this method is called*/
 		BytePacker packer = new BytePacker.Builder()
 								.setProperty("ServiceId", client.CREATE_ACCOUNT)
 								.setProperty("messageId", message_id)

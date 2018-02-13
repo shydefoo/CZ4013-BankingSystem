@@ -25,8 +25,6 @@ public abstract class Service {
 						.defineComponents(unpacker);
 	}
 	
-	
-	
 	public final ByteUnpacker.UnpackedMsg receivalProcedure(Client client, BytePacker packer, int message_id ) throws IOException{
 		while(true){
 			DatagramPacket reply = client.receive();
