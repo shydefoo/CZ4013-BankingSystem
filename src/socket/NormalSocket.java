@@ -8,6 +8,7 @@ import java.net.InetAddress;
 import main.Console;
 import message.BytePacker;
 
+
 public class NormalSocket implements Socket {
 	
 	private DatagramSocket socket;

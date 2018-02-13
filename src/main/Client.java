@@ -37,7 +37,7 @@ public class Client {
 	public Client(String ipAddress, int portNumber) throws UnknownHostException, SocketException{
 		this.idToServiceMap = new HashMap<>();
 		this.serverIpAddress = ipAddress;
-		this.InetIpAddress = InetAddress.getByName(this.serverIpAddress);
+		this.InetIpAddress = InetAddress.getByName(ipAddress);
 		this.socket = new NormalSocket(new DatagramSocket());
 	}
 	
