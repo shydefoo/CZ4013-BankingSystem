@@ -6,6 +6,7 @@ import main.Client;
 import main.Console;
 import message.BytePacker;
 import message.ByteUnpacker;
+import message.OneByteInt;
 
 public class CreateAccountService extends Service {
 	
@@ -28,7 +29,7 @@ public class CreateAccountService extends Service {
 		double init_balance = console.askForDouble("Enter initial balance:");
 		int message_id = client.getMessage_id();	/*This should only be called once for each executeRequest as the message_id will be incremented each time  this method is called*/
 		BytePacker packer = new BytePacker.Builder()
-								.setProperty("ServiceId", client.CREATE_ACCOUNT)
+								.setProperty("ServiceId", new OneByteInt(Client.CREATE_ACCOUNT))
 								.setProperty("messageId", message_id)
 								.setProperty("Name", name)
 								.setProperty("Pin", pin)

@@ -9,7 +9,7 @@ import services.CreateAccountService;
 
 public class Application {
 	public static void main(String[] args){
-		String serverIpAddress = "127.0.0.1";
+		String serverIpAddress = "0";
 		int serverPortNumber = 6799;
 		Console console = new Console(new Scanner(System.in));
 				
