@@ -40,7 +40,7 @@ public class CreateAccountService extends Service {
 		
 		ByteUnpacker.UnpackedMsg unpackedMsg = receivalProcedure(client, packer, message_id);
 		if(checkStatus(unpackedMsg)){
-			String accNum = unpackedMsg.getString("REPLY");
+			String accNum = unpackedMsg.getString(Service.REPLY);
 			Console.println("Account successfully created.");
 			Console.println("Account number: " + accNum);	
 		}

@@ -21,7 +21,7 @@ public class Client {
 	public static final int MAKE_WITHDRAWL = 3;
 	public static final int BUFFER_SIZE = 2048;
 	
-	private Socket socket = null;
+	private Socket designatedSocket = null;
 	private HashMap<Integer, Service> idToServiceMap; /*Hashmap containing the serviceId and corresponding service*/
 	private String serverIpAddress = null;
 	private int serverPortNumber = 0;
@@ -38,7 +38,8 @@ public class Client {
 		this.idToServiceMap = new HashMap<>();
 		this.serverIpAddress = ipAddress;
 		this.InetIpAddress = InetAddress.getByName(ipAddress);
-		this.socket = new NormalSocket(new DatagramSocket());
+		this.designatedSocket = new NormalSocket(new DatagramSocket());
+		this.serverPortNumber = portNumber;
 	}
 	
 	public int getMessage_id() {
@@ -61,13 +62,13 @@ public class Client {
 		}
 	}
 	public void send(BytePacker packer) throws IOException{
-		this.socket.send(packer, this.InetIpAddress, this.serverPortNumber);
+		this.designatedSocket.send(packer, this.InetIpAddress, this.serverPortNumber);
 	}
 	
 	public DatagramPacket receive() throws IOException{
 		clearBuffer();
 		DatagramPacket p = new DatagramPacket(buffer,buffer.length);
-		this.socket.receive(p);
+		this.designatedSocket.receive(p);
 		return p;
 		
 	}

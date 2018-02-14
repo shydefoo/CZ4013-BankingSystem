@@ -12,9 +12,9 @@ import message.OneByteInt;
 public abstract class Service {
 	
 	private final ByteUnpacker unpacker;
-	private static final String STATUS = "status";
-    private static final String MESSAGE_ID = "messageId";
-    private static final String REPLY = "reply";
+	protected static final String STATUS = "status";
+    protected static final String MESSAGE_ID = "messageId";
+    protected static final String REPLY = "reply";
 	
 	protected Service(ByteUnpacker unpacker){
 		this.unpacker = new ByteUnpacker.Builder()
