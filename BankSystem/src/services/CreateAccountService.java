@@ -9,7 +9,10 @@ import message.ByteUnpacker;
 import message.OneByteInt;
 
 public class CreateAccountService extends Service {
-	
+	protected final static String NAME = "Name";
+	protected final static String PIN = "Pin";
+	protected final static String CURRENCY = "Currency";
+	protected final static String BALANCE = "Balance";
 	
 	public CreateAccountService(){
 		super(null);
@@ -31,10 +34,10 @@ public class CreateAccountService extends Service {
 		BytePacker packer = new BytePacker.Builder()
 								.setProperty("ServiceId", new OneByteInt(Client.CREATE_ACCOUNT))
 								.setProperty("messageId", message_id)
-								.setProperty("Name", name)
-								.setProperty("Pin", pin)
-								.setProperty("Currency",currency)
-								.setProperty("Balance", init_balance)
+								.setProperty(NAME, name)
+								.setProperty(PIN, pin)
+								.setProperty(CURRENCY,currency)
+								.setProperty(BALANCE, init_balance)
 								.build();
 		client.send(packer);
 		

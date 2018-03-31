@@ -1,0 +1,28 @@
+package services;
+
+import java.net.InetAddress;
+
+import message.BytePacker;
+import message.ByteUnpacker;
+import socket.Socket;
+
+public class CloseAccountService extends Service {
+	protected final static String NAME = "Name";
+	protected final static String ACCOUNT_NUM = "AccountNumber";
+	protected final static String PIN = "Pin";
+	public CloseAccountService(){
+		super(new ByteUnpacker.Builder()
+						.setType(NAME, ByteUnpacker.TYPE.STRING)
+						.setType(ACCOUNT_NUM, ByteUnpacker.TYPE.INTEGER)
+						.setType(PIN, ByteUnpacker.TYPE.INTEGER)
+						.build());
+						
+	}
+	@Override
+	public BytePacker handleService(InetAddress clientAddress, int clientPortNumber, byte[] dataFromClient,
+			Socket socket) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}
