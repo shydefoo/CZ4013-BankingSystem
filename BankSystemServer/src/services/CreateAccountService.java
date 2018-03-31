@@ -35,7 +35,7 @@ public class CreateAccountService extends Service {
 		int messageId = unpackedMsg.getInteger(super.MESSAGE_ID);
 		
 		int accNum = Bank.createAccount(accHolderName, accPin, accCurrency, accBalance);
-		OneByteInt status = new OneByteInt(0);
+		OneByteInt status = new OneByteInt(0); 
 		String reply = String.format("Account created, account number: %d", accNum);
 		BytePacker replyMessage = super.generateReply(status, messageId, reply);
 		

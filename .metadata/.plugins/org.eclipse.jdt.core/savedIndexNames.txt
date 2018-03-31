@@ -13,6 +13,5 @@ INDEX VERSION 1.130+/Users/Shide/Documents/CS/Y3Sem2/CZ4013/distributed_programs
 2362891960.index
 206535591.index
 2842472240.index
-2621937423.index
 1097848872.index
 1690311816.index

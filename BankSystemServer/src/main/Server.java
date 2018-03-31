@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import message.BytePacker;
+import services.CallbackHandlerClass;
 import services.Service;
 import socket.NormalSocket;
 import socket.Socket;
@@ -53,17 +54,19 @@ public class Server {
 			if(idToServiceMap.containsKey(serviceRequested)){
 				service = idToServiceMap.get(serviceRequested);
 				BytePacker replyToRequest = service.handleService(clientAddress,clientPortNumber, data, this.designatedSocket);
-				this.designatedSocket.send(replyToRequest, clientAddress, clientPortNumber);
-				this.callbackHandler.broadcast(replyToRequest);
-				//To do call back service, method has to come here as well. What kind of reply depends on service requested by client.
-			}			
+				this.designatedSocket.send(replyToRequest, clientAddress, clientPortNumber); //send reply to client that made request
+				this.callbackHandler.broadcast(replyToRequest); //send update to all clients that registered for auto-monitoring.
+			}
+			else{
+				System.out.println("Invalid Service ID");
+			}
 		}
 	}
 	
 	public DatagramPacket receive() throws IOException{
 		Arrays.fill(buffer, (byte) 0);	//empty buffer
 		DatagramPacket p = new DatagramPacket(buffer, buffer.length);
-		System.out.println("Blocking...");
+		System.out.println("Waiting for requests.....");
 		this.designatedSocket.receive(p);
 		System.out.println("Received request.");
 		return p;

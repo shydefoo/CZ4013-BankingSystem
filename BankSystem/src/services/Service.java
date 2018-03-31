@@ -33,6 +33,7 @@ public abstract class Service {
 			if(checkMsgId(message_id,unpackedMsg)) return unpackedMsg;
 			else{
 				Console.println("Message Id not the same");
+				//Resend if request not met
 				client.send(packer);
 			}
 			
@@ -52,6 +53,11 @@ public abstract class Service {
 		return false;
 	}
 	
+	public final boolean checkStatus(ByteUnpacker.UnpackedMsg unpackedMsg, int replyStatus){
+		OneByteInt status = unpackedMsg.getOneByteInt(STATUS);
+		if(status.getValue()==replyStatus)return true; //0 means no error? okay. 
+		return false;
+	}
 	
 	public abstract void executeRequest(Console console, Client client) throws IOException;
 	

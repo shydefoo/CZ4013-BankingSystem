@@ -29,10 +29,22 @@ public class RegisterCallbackService extends Service{
 		
 		//Wait for reply from server that says callback registered, then enter auto monitoring state
 		ByteUnpacker.UnpackedMsg unpackedMsg = receivalProcedure(client, packer, message_id);
-		if(checkStatus(unpackedMsg)){
-			String accNum = unpackedMsg.getString(Service.REPLY);
-			Console.println("Account successfully created.");
-			Console.println("Account number: " + accNum);	
+		if(checkStatus(unpackedMsg,2)){
+			String reply = unpackedMsg.getString(Service.REPLY);
+			Console.println(reply);
+			
+			/*
+			 * Inside here, have while loop that runs infinitely, 
+			 * call receive receive receive untill 1 msg that has status 4 which means auto-monitoring expired.
+			 * */
+			while(true){
+				ByteUnpacker.UnpackedMsg callbackMsg = receivalProcedure(client, packer, message_id);
+				String callbackMsgReply = callbackMsg.getString(Service.REPLY);
+				Console.println(callbackMsgReply);
+				if(checkStatus(callbackMsg,4)){
+					break;
+				}
+			}
 		}
 	}
 	
