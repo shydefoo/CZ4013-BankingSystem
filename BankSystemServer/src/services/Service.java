@@ -9,8 +9,8 @@ import socket.Socket;
 
 public abstract class Service {
 	ByteUnpacker unpacker;
-	protected static final String SERVICE_ID = "ServiceId";
-	protected static final String MESSAGE_ID = "messageId";
+	protected static final String SERVICE_ID = "serviceId";
+	public static final String MESSAGE_ID = "messageId";
 	protected static final String STATUS = "status";
     protected static final String REPLY = "reply";
     

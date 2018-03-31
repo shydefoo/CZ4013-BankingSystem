@@ -1,0 +1,25 @@
+package main;
+
+import java.net.InetAddress;
+import java.util.ArrayList;
+import socket.Socket;
+
+public class CallbackHandlerClass {
+	private Socket designatedSocket;
+	private ArrayList<Subscribers> allTheSubscribers;
+	public CallbackHandlerClass(Socket designatedSocket){
+		this.designatedSocket = designatedSocket;
+		allTheSubscribers = new ArrayList<>();
+		
+	}
+	
+	public class Subscribers{
+		private InetAddress address;
+		private int portNumber;
+		public Subscribers(InetAddress address, int portNumber){
+			this.address = address;
+			this.portNumber = portNumber;
+		}
+	}
+
+}

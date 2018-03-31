@@ -19,6 +19,7 @@ public class Client {
 	public static final int CLOSE_ACCOUNT = 1;
 	public static final int MAKE_DEPOSIT = 2;
 	public static final int MAKE_WITHDRAWL = 3;
+	public static final int REGISTER_CALLBACK = 4;
 	public static final int BUFFER_SIZE = 2048;
 	
 	private Socket designatedSocket = null;

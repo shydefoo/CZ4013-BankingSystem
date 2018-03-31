@@ -1,0 +1,46 @@
+package main;
+
+import java.io.IOException;
+import java.net.InetAddress;
+import java.util.ArrayList;
+
+import message.BytePacker;
+import socket.Socket;
+
+public class CallbackHandlerClass {
+	private Socket designatedSocket;
+	private ArrayList<Subscriber> allTheSubscribers;
+	public CallbackHandlerClass(Socket designatedSocket){
+		this.designatedSocket = designatedSocket;
+		allTheSubscribers = new ArrayList<>();
+		
+	}
+	
+	public void registerSubscriber(InetAddress address, int portNumber){
+		Subscriber subscriber = new Subscriber(address, portNumber);
+		allTheSubscribers.add(subscriber); //lets keep it simple for now, just add the subscriber in.
+	}
+	
+	public void broadcast(BytePacker msg) throws IOException{
+		for (Subscriber s: allTheSubscribers){
+			designatedSocket.send(msg, s.getAddress(), s.getPortNumber());
+		}
+	}
+	
+	public class Subscriber{
+		private InetAddress address;
+		private int portNumber;
+		public Subscriber(InetAddress address, int portNumber){
+			this.address = address;
+			this.portNumber = portNumber;
+		}
+		
+		public InetAddress getAddress(){
+			return this.address;
+		}
+		public int getPortNumber(){
+			return this.portNumber;
+		}
+	}
+
+}

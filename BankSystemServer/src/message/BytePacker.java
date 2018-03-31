@@ -31,6 +31,10 @@ public class BytePacker {
 		return propToValue.get(key);
 	}
 	
+	public HashMap<String,Object> getPropToValue(){
+		return this.propToValue;
+	}
+	
 	public byte[] getByteArray(){
 		/*
         Calculate the size required for the byte array

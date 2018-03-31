@@ -13,6 +13,7 @@ public abstract class Service {
 	
 	private final ByteUnpacker unpacker;
 	protected static final String STATUS = "status";
+	protected static final String SERVICE_ID = "serviceId";
     protected static final String MESSAGE_ID = "messageId";
     protected static final String REPLY = "reply";
 	
@@ -47,7 +48,7 @@ public abstract class Service {
 	
 	public final boolean checkStatus(ByteUnpacker.UnpackedMsg unpackedMsg){
 		OneByteInt status = unpackedMsg.getOneByteInt(STATUS);
-		if(status.getValue()==0)return true;
+		if(status.getValue()==0)return true; //0 means no error? okay. 
 		return false;
 	}
 	

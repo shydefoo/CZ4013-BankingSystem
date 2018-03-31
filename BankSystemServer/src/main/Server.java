@@ -15,18 +15,19 @@ import socket.Socket;
 
 public class Server {
 	private HashMap<Integer, Service> idToServiceMap;
-	private Socket designatesSocket;
+	private Socket designatedSocket;
 	private int portNumber;
 	private String ipAddress;
 	private final int bufferSize = 2048;
 	private byte[] buffer;
+	private CallbackHandlerClass callbackHandler;
 	
 	public Server(int portNumber) throws SocketException{
-		this.idToServiceMap = new HashMap<>();
-		this.portNumber = portNumber;
-		this.designatesSocket = new NormalSocket(new DatagramSocket(this.portNumber));
-		this.buffer = new byte[bufferSize];
-		
+		this.idToServiceMap = new HashMap<>(); //Hashmap containing service id as key, service object as value
+		this.portNumber = portNumber; //Port number server is listening at
+		this.designatedSocket = new NormalSocket(new DatagramSocket(this.portNumber));
+		this.buffer = new byte[bufferSize]; //Buffer to store received data
+		this.callbackHandler = new CallbackHandlerClass(this.designatedSocket);
 	}
 	
 	public void addServiceToServer(int id, Service service){
@@ -40,6 +41,7 @@ public class Server {
 	}
 	
 	public void start() throws IOException{
+		//Constantly blocks for new requests
 		while(true){
 			DatagramPacket p = receive(); /*Create DatagramPacket to receive requests from clients*/
 			byte[] data = p.getData();
@@ -50,8 +52,9 @@ public class Server {
 			Service service = null;
 			if(idToServiceMap.containsKey(serviceRequested)){
 				service = idToServiceMap.get(serviceRequested);
-				BytePacker replyToRequest = service.handleService(clientAddress,clientPortNumber, data, this.designatesSocket);
-				this.designatesSocket.send(replyToRequest, clientAddress, clientPortNumber);		
+				BytePacker replyToRequest = service.handleService(clientAddress,clientPortNumber, data, this.designatedSocket);
+				this.designatedSocket.send(replyToRequest, clientAddress, clientPortNumber);
+				this.callbackHandler.broadcast(replyToRequest);
 				//To do call back service, method has to come here as well. What kind of reply depends on service requested by client.
 			}			
 		}
@@ -61,7 +64,7 @@ public class Server {
 		Arrays.fill(buffer, (byte) 0);	//empty buffer
 		DatagramPacket p = new DatagramPacket(buffer, buffer.length);
 		System.out.println("Blocking...");
-		this.designatesSocket.receive(p);
+		this.designatedSocket.receive(p);
 		System.out.println("Received request.");
 		return p;
 	}

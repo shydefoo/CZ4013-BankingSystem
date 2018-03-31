@@ -14,7 +14,11 @@ public class ServerApplication {
 			System.out.println("Starting server");
 			bank = new Bank();
 			server = new Server(8000);
+			
+			//Services to be added to server
 			server.addServiceToServer(0, new CreateAccountService());
+			////////////////
+			
 			server.start();
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
