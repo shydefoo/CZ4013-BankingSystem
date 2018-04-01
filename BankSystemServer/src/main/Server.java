@@ -37,7 +37,7 @@ public class Server {
 			System.out.println("Service added");
 		}
 		else{
-			System.out.printf("There is no existing service using service id %d, please use a different id.\n",id);
+			System.out.printf("There is an existing service using service id %d, please use a different id.\n",id);
 		}		
 	}
 	
