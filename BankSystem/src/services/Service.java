@@ -13,7 +13,6 @@ public abstract class Service {
 	
 	private final ByteUnpacker unpacker;
 	protected static final String STATUS = "status";
-	protected static final String SERVICE_ID = "serviceId";
     protected static final String MESSAGE_ID = "messageId";
     protected static final String REPLY = "reply";
 	
@@ -33,7 +32,6 @@ public abstract class Service {
 			if(checkMsgId(message_id,unpackedMsg)) return unpackedMsg;
 			else{
 				Console.println("Message Id not the same");
-				//Resend if request not met
 				client.send(packer);
 			}
 			
@@ -49,15 +47,10 @@ public abstract class Service {
 	
 	public final boolean checkStatus(ByteUnpacker.UnpackedMsg unpackedMsg){
 		OneByteInt status = unpackedMsg.getOneByteInt(STATUS);
-		if(status.getValue()==0)return true; //0 means no error? okay. 
+		if(status.getValue()==0)return true;
 		return false;
 	}
 	
-	public final boolean checkStatus(ByteUnpacker.UnpackedMsg unpackedMsg, int replyStatus){
-		OneByteInt status = unpackedMsg.getOneByteInt(STATUS);
-		if(status.getValue()==replyStatus)return true; //0 means no error? okay. 
-		return false;
-	}
 	
 	public abstract void executeRequest(Console console, Client client) throws IOException;
 	

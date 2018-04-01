@@ -9,11 +9,7 @@ import message.ByteUnpacker;
 import message.OneByteInt;
 
 public class CreateAccountService extends Service {
-
-	protected final static String NAME = "Name";
-	protected final static String PIN = "Pin";
-	protected final static String CURRENCY = "Currency";
-	protected final static String BALANCE = "Balance";
+	
 	
 	public CreateAccountService(){
 		super(null);
@@ -33,22 +29,20 @@ public class CreateAccountService extends Service {
 		double init_balance = console.askForDouble("Enter initial balance:");
 		int message_id = client.getMessage_id();	/*This should only be called once for each executeRequest as the message_id will be incremented each time  this method is called*/
 		BytePacker packer = new BytePacker.Builder()
-								.setProperty(Service.SERVICE_ID, new OneByteInt(Client.CREATE_ACCOUNT))
-								.setProperty(Service.MESSAGE_ID, message_id)
-								.setProperty(NAME, name)
-								.setProperty(PIN, pin)
-								.setProperty(CURRENCY,currency)
-								.setProperty(BALANCE, init_balance)
+								.setProperty("ServiceId", new OneByteInt(Client.CREATE_ACCOUNT))
+								.setProperty("messageId", message_id)
+								.setProperty("Name", name)
+								.setProperty("Pin", pin)
+								.setProperty("Currency",currency)
+								.setProperty("Balance", init_balance)
 								.build();
 		client.send(packer);
 		
 		ByteUnpacker.UnpackedMsg unpackedMsg = receivalProcedure(client, packer, message_id);
 		if(checkStatus(unpackedMsg)){
-			//String accNum = unpackedMsg.getString(Service.REPLY);
-			//Console.println("Account successfully created.");
-			//Console.println("Account number: " + accNum);	
-			String reply = unpackedMsg.getString(Service.REPLY);
-			Console.println(reply);
+			String accNum = unpackedMsg.getString(Service.REPLY);
+			Console.println("Account successfully created.");
+			Console.println("Account number: " + accNum);	
 		}
 		else{
 			Console.println("Account create failed");

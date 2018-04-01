@@ -20,8 +20,7 @@ public class CreateAccountService extends Service {
 						.setType(PIN, ByteUnpacker.TYPE.INTEGER)
 						.setType(CURRENCY, ByteUnpacker.TYPE.STRING)
 						.setType(BALANCE, ByteUnpacker.TYPE.DOUBLE)
-						.build());
-						
+						.build());			
 	}
 	
 	@Override
@@ -35,9 +34,8 @@ public class CreateAccountService extends Service {
 		int messageId = unpackedMsg.getInteger(super.MESSAGE_ID);
 		
 		int accNum = Bank.createAccount(accHolderName, accPin, accCurrency, accBalance);
-		OneByteInt status = new OneByteInt(0); 
-		String reply = String.format("Account created, account number: %d", accNum);
-		BytePacker replyMessage = super.generateReply(status, messageId, reply);
+		OneByteInt status = new OneByteInt(0);
+		BytePacker replyMessage = super.generateReply(status, messageId, String.valueOf(accNum));
 		
 		return replyMessage;
 		

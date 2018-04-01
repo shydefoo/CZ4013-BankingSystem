@@ -25,5 +25,28 @@ public class Bank {
 		return accNum;
 	}
 	
-	
+	public static double updateBalance(String accOwner, int accNum, int pin, String accCurrency, double amount, int choice){
+		//choice = 1 means user wants to deposit money
+		Account temp;
+		if(choice == 1)
+		{
+			temp = AllTheAccounts.get(accNum);
+			temp.setAccBalance(temp.getAccBalance() + amount);
+			
+		}
+		//withdraw money
+		else
+		{
+			temp = AllTheAccounts.get(accNum);
+			if(temp.getAccBalance() > amount) {
+				temp.setAccBalance(temp.getAccBalance() - amount);
+				System.out.println("Account's balance is " + temp.getAccBalance());
+			}
+				
+			else
+				System.out.println("Account's balance is not enough " + temp.getAccBalance());
+		}
+		System.out.println(AllTheAccounts.get(accNum).getAccBalance());
+		return temp.getAccBalance();
+	}
 }
