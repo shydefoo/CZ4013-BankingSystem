@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.net.SocketException;
 
 import bank.Bank;
+import services.BalanceUpdate;
 import services.CreateAccountService;
-import services.RegisterCallbackService;
 
 public class ServerApplication {
 	private static Server server;
@@ -15,12 +15,8 @@ public class ServerApplication {
 			System.out.println("Starting server");
 			bank = new Bank();
 			server = new Server(8000);
-			
-			//Services to be added to server
 			server.addServiceToServer(0, new CreateAccountService());
-			server.addServiceToServer(4, new RegisterCallbackService());
-			////////////////
-			
+			server.addServiceToServer(2, new BalanceUpdate());
 			server.start();
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block

@@ -8,45 +8,41 @@ import message.BytePacker;
 import message.ByteUnpacker;
 import message.OneByteInt;
 
-public class CreateAccountService extends Service {
-	
-	
-	public CreateAccountService(){
+public class BalanceUpdate extends Service {
+		
+	public BalanceUpdate() {
 		super(null);
 	}
 	
-	/***
-	 * Account creation: 
-	 * Required details - 1) Name (string), 2) Password (6 digit integer), 3) Currency type (string?), 4) Initial Balance (Double)
-	 * @throws IOException 
-	 */
-	@Override
-	public void executeRequest(Console console, Client client) throws IOException {
-		Console.println("---------------------Account creation---------------------------------");
+	public void executeRequest(Console console, Client client) throws IOException{
+		Console.println("---------------------Balance Update---------------------------------");
 		String name = console.askForString("Enter your name:");
+		int accNum = console.askForInteger("Enter your Account Number:");
 		int pin = console.askForInteger("Input your 6 digit pin-number:");
 		String currency = console.askForString("Specify currency type:");
-		double init_balance = console.askForDouble("Enter initial balance:");
+		int choice = console.askForInteger("Do you want to deposit(1) or withdraw(0):"); 
+		double amount = console.askForDouble("Enter amount to deposit/withdraw:");
 		int message_id = client.getMessage_id();	/*This should only be called once for each executeRequest as the message_id will be incremented each time  this method is called*/
+		
 		BytePacker packer = new BytePacker.Builder()
-								.setProperty("ServiceId", new OneByteInt(Client.CREATE_ACCOUNT))
+								.setProperty("ServiceId", new OneByteInt(Client.UPDATE_BALANCE))
 								.setProperty("messageId", message_id)
 								.setProperty("Name", name)
+								.setProperty("accNum", accNum)
 								.setProperty("Pin", pin)
 								.setProperty("Currency",currency)
-								.setProperty("Balance", init_balance)
+								.setProperty("amount", amount)
+								.setProperty("choice", choice)
 								.build();
 		client.send(packer);
 		
 		ByteUnpacker.UnpackedMsg unpackedMsg = receivalProcedure(client, packer, message_id);
 		if(checkStatus(unpackedMsg)){
-			String accNum = unpackedMsg.getString(Service.REPLY);
-			Console.println("Account successfully created.");
-			Console.println("Account number: " + accNum);	
+			String Balance = unpackedMsg.getString(Service.REPLY);
+			Console.println("Current Balance: " + Balance);	
 		}
 		else{
-			Console.println("Account create failed");
+			Console.println("Balance Update failed");
 		}
 	}
-
 }

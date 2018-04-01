@@ -9,26 +9,24 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import message.BytePacker;
-import services.CallbackHandlerClass;
 import services.Service;
 import socket.NormalSocket;
 import socket.Socket;
 
 public class Server {
 	private HashMap<Integer, Service> idToServiceMap;
-	private Socket designatedSocket;
+	private Socket designatesSocket;
 	private int portNumber;
 	private String ipAddress;
 	private final int bufferSize = 2048;
 	private byte[] buffer;
-	private CallbackHandlerClass callbackHandler;
 	
 	public Server(int portNumber) throws SocketException{
-		this.idToServiceMap = new HashMap<>(); //Hashmap containing service id as key, service object as value
-		this.portNumber = portNumber; //Port number server is listening at
-		this.designatedSocket = new NormalSocket(new DatagramSocket(this.portNumber));
-		this.buffer = new byte[bufferSize]; //Buffer to store received data
-		this.callbackHandler = new CallbackHandlerClass(this.designatedSocket);
+		this.idToServiceMap = new HashMap<>();
+		this.portNumber = portNumber;
+		this.designatesSocket = new NormalSocket(new DatagramSocket(this.portNumber));
+		this.buffer = new byte[bufferSize];
+		
 	}
 	
 	public void addServiceToServer(int id, Service service){
@@ -42,7 +40,6 @@ public class Server {
 	}
 	
 	public void start() throws IOException{
-		//Constantly blocks for new requests
 		while(true){
 			DatagramPacket p = receive(); /*Create DatagramPacket to receive requests from clients*/
 			byte[] data = p.getData();
@@ -53,21 +50,18 @@ public class Server {
 			Service service = null;
 			if(idToServiceMap.containsKey(serviceRequested)){
 				service = idToServiceMap.get(serviceRequested);
-				BytePacker replyToRequest = service.handleService(clientAddress,clientPortNumber, data, this.designatedSocket);
-				this.designatedSocket.send(replyToRequest, clientAddress, clientPortNumber); //send reply to client that made request
-				this.callbackHandler.broadcast(replyToRequest); //send update to all clients that registered for auto-monitoring.
-			}
-			else{
-				System.out.println("Invalid Service ID");
-			}
+				BytePacker replyToRequest = service.handleService(clientAddress,clientPortNumber, data, this.designatesSocket);
+				this.designatesSocket.send(replyToRequest, clientAddress, clientPortNumber);		
+				//To do call back service, method has to come here as well. What kind of reply depends on service requested by client.
+			}			
 		}
 	}
 	
 	public DatagramPacket receive() throws IOException{
 		Arrays.fill(buffer, (byte) 0);	//empty buffer
 		DatagramPacket p = new DatagramPacket(buffer, buffer.length);
-		System.out.println("Waiting for requests.....");
-		this.designatedSocket.receive(p);
+		System.out.println("Blocking...");
+		this.designatesSocket.receive(p);
 		System.out.println("Received request.");
 		return p;
 	}

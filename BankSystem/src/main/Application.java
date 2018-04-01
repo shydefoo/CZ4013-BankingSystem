@@ -5,29 +5,21 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
+import services.BalanceUpdate;
 import services.CreateAccountService;
-import services.RegisterCallbackService;
 
 public class Application {
 	public static void main(String[] args){
-		String serverIpAddress = "127.0.0.1"; //need to change if using a different computer on the network
-		int serverPortNumber = 8000; //designated port number
+		String serverIpAddress = "127.0.0.1";
+		int serverPortNumber = 8000;
 		Console console = new Console(new Scanner(System.in));
 				
 		try {
 			Client client = new Client(serverIpAddress, serverPortNumber);
-			
-			//add available service
 			client.addService(0, new CreateAccountService());
-			client.addService(4, new RegisterCallbackService());
-			
-			//hardcoded to execute service 0
-			while(true){
-				int serviceNumber = console.askForInteger("Enter service request: ");
-				if(serviceNumber ==-1) break;
-				client.execute(serviceNumber, console);
-			}
-			
+			client.addService(2, new BalanceUpdate());
+			client.execute(0, console);
+			client.execute(2, console);
 		} catch (UnknownHostException | SocketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
