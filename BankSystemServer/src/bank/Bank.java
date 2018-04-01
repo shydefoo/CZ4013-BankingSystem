@@ -25,13 +25,5 @@ public class Bank {
 		return accNum;
 	}
 	
-	public static int closeAccount(String accOwner, int accNum, int pin){
-		Account toClose = AllTheAccounts.get(accNum);
-		int status = -1; //1: success, -1: failed.
-		if(toClose!=null){
-			//If account num exists, check if name and pin match. 
-			status = (toClose.getAccPin()==pin && toClose.getAccOwner().equals(accOwner)) ? 1:-1;
-		}
-		return status;
-	}
+	
 }

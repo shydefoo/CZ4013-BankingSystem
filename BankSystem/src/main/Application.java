@@ -22,7 +22,12 @@ public class Application {
 			client.addService(4, new RegisterCallbackService());
 			
 			//hardcoded to execute service 0
-			client.execute(4, console);
+			while(true){
+				int serviceNumber = console.askForInteger("Enter service request: ");
+				if(serviceNumber ==-1) break;
+				client.execute(serviceNumber, console);
+			}
+			
 		} catch (UnknownHostException | SocketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
