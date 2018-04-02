@@ -26,12 +26,20 @@ public abstract class Service {
 						.build()
 						.defineComponents(unpacker);
 	}
-	
+	/**
+	 * 
+	 * @param client
+	 * @param packer request that was just sent out, now waiting for reply from server
+	 * @param message_id id of request sent out
+	 * @return Unpacked message once received from server. message_id in msg from server must match param message_id
+	 * @throws IOException
+	 */
 	public final ByteUnpacker.UnpackedMsg receivalProcedure(Client client, BytePacker packer, int message_id ) throws IOException{
 		while(true){
 			try{
+
 				DatagramPacket reply = client.receive();
-				ByteUnpacker.UnpackedMsg unpackedMsg = this.unpacker.parseByteArray(reply.getData());
+				ByteUnpacker.UnpackedMsg unpackedMsg = this.getUnpacker().parseByteArray(reply.getData());
 				if(checkMsgId(message_id,unpackedMsg)) return unpackedMsg;
 			}catch (SocketTimeoutException e){
 				//If socket receive function timeout, catch exception, resend request. Stays here until reply received? okay. 
@@ -66,6 +74,9 @@ public abstract class Service {
 	}
 	
 	public abstract void executeRequest(Console console, Client client) throws IOException;
+	public ByteUnpacker getUnpacker() {
+		return unpacker;
+	}
 	
 	
 }

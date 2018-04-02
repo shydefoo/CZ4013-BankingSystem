@@ -51,10 +51,11 @@ public class Server {
 				int clientPortNumber = p.getPort();
 				//Service ID from client is the first byte in the byte array sent from client
 				int serviceRequested = data[0];
-				Console.debug("Service Requested: " + serviceRequested);
+				
 				Service service = null;
 				if(idToServiceMap.containsKey(serviceRequested)){
 					service = idToServiceMap.get(serviceRequested);
+					Console.debug("Service Requested: " + service.ServiceName());
 					BytePacker replyToRequest = service.handleService(clientAddress,clientPortNumber, data, this.designatedSocket);
 					this.designatedSocket.send(replyToRequest, clientAddress, clientPortNumber);		
 					//To do call back service, method has to come here as well. What kind of reply depends on service requested by client.

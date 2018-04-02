@@ -47,5 +47,10 @@ public class CheckBalanceService extends Service {
 		
 		return replyMessageClient;
 	}
+
+	@Override
+	public String ServiceName() {
+		return "Check Balance";
+	}
 	
 }

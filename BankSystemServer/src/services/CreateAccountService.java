@@ -48,4 +48,9 @@ public class CreateAccountService extends Service {
 		
 		
 	}
+
+	@Override
+	public String ServiceName() {
+		return "Create Account";
+	}
 }

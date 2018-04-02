@@ -19,7 +19,7 @@ public class NormalSocket implements Socket {
 	
 	@Override
 	public void send(BytePacker msg, InetAddress address, int port) throws IOException {
-		Console.debug("Port: " + port);
+		Console.debug("InetAddress: "+ address + ", Port: " + port);
 		byte[] message = msg.getByteArray();
 		DatagramPacket p = new DatagramPacket(message, message.length,address, port);
 		send(p);

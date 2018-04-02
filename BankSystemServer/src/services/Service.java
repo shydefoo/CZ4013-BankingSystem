@@ -43,5 +43,5 @@ public abstract class Service {
 	}
 	
 	public abstract BytePacker handleService(InetAddress clientAddress, int clientPortNumber, byte[] dataFromClient, Socket socket);
-	
+	public abstract String ServiceName();
 }

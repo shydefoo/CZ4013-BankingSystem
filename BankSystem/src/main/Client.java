@@ -69,16 +69,20 @@ public class Client {
 	}
 	
 	public DatagramPacket receive() throws IOException{
-		clearBuffer();
+		Arrays.fill(buffer,(byte) 0);
 		DatagramPacket p = new DatagramPacket(buffer,buffer.length);
 		this.designatedSocket.receive(p);
-		return p;
-		
+		return p;	
 	}
 	
-	public void clearBuffer(){
-		 Arrays.fill(buffer,(byte) 0);
+	public Socket getDesignatedSocket(){
+		return this.designatedSocket;
 	}
+	
+	public int getTimeout(){
+		return this.timeout;
+	}
+	
 	
 	public void useReceivingLossSocket(double probability){
 		this.designatedSocket = new ReceivingLossSocket(this.designatedSocket,probability);
