@@ -12,6 +12,8 @@ import java.util.HashMap;
 import message.BytePacker;
 import services.Service;
 import socket.NormalSocket;
+import socket.ReceivingLossSocket;
+import socket.SendingLossSocket;
 import socket.Socket;
 
 public class Client {
@@ -76,6 +78,14 @@ public class Client {
 	
 	public void clearBuffer(){
 		 Arrays.fill(buffer,(byte) 0);
+	}
+	
+	public void useReceivingLossSocket(double probability){
+		this.designatedSocket = new ReceivingLossSocket(this.designatedSocket,probability);
+	}
+	
+	public void useSendingLossSocket(double probability){
+		this.designatedSocket = new SendingLossSocket(this.designatedSocket, probability);
 	}
 	
 	

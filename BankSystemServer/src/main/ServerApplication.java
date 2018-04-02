@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 
 import bank.Bank;
 import services.CallbackHandlerClass;
@@ -27,7 +28,7 @@ public class ServerApplication {
 			address = InetAddress.getByName("127.0.0.1");
 			socket = new NormalSocket(new DatagramSocket(PORT_NUMBER,address));
 			server = new Server(socket);
-			server.useReceivingLossSocket(0.1);
+			server.useSendingLossSocket(0.1);
 			callbackHandler = new CallbackHandlerClass(socket);
 			//Services to be added to server
 			server.addServiceToServer(0, new CreateAccountService(callbackHandler));
@@ -40,9 +41,9 @@ public class ServerApplication {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			Console.debug("Server error");
 			e.printStackTrace();
-		}
+		} 
 		
 	}
 }
