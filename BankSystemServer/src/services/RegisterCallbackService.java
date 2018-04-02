@@ -22,6 +22,7 @@ public class RegisterCallbackService extends Service {
 	@Override
 	public BytePacker handleService(InetAddress clientAddress, int clientPortNumber, byte[] dataFromClient,
 			Socket socket) {
+		//clientAddress, portnumber not in used at the moment...used to check at most once semantics/at least once? Hmmm
 		ByteUnpacker.UnpackedMsg unpackedMsg = this.unpacker.parseByteArray(dataFromClient);
 		int messageId = unpackedMsg.getInteger(Service.MESSAGE_ID);
 		int timeout = unpackedMsg.getInteger(TIMEOUT);

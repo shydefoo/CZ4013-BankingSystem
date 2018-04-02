@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.SocketException;
 
 import bank.Bank;
+import services.CheckBalanceService;
 import services.CreateAccountService;
 import services.RegisterCallbackService;
 
@@ -18,7 +19,9 @@ public class ServerApplication {
 			
 			//Services to be added to server
 			server.addServiceToServer(0, new CreateAccountService());
+			
 			server.addServiceToServer(4, new RegisterCallbackService());
+			server.addServiceToServer(5, new CheckBalanceService());
 			////////////////
 			
 			server.start();

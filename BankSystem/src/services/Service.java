@@ -41,6 +41,8 @@ public abstract class Service {
 	}
 	public final boolean checkMsgId(Integer message_id, ByteUnpacker.UnpackedMsg unpackedMsg){
 		Integer return_message_id = unpackedMsg.getInteger(MESSAGE_ID);
+		System.out.println("return_message_id: " + Integer.toString(return_message_id));
+		System.out.println("message_id: " + Integer.toString(message_id));
 		if(return_message_id != null){
 			return message_id == return_message_id;
 		}

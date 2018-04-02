@@ -14,6 +14,7 @@ public class CreateAccountService extends Service {
 	protected final static String PIN = "Pin";
 	protected final static String CURRENCY = "Currency";
 	protected final static String BALANCE = "Balance";
+	//private CallbackHandlerClass callbackHandler;
 	public CreateAccountService(){
 		super(new ByteUnpacker.Builder()
 						.setType(NAME, ByteUnpacker.TYPE.STRING)
@@ -21,20 +22,21 @@ public class CreateAccountService extends Service {
 						.setType(CURRENCY, ByteUnpacker.TYPE.STRING)
 						.setType(BALANCE, ByteUnpacker.TYPE.DOUBLE)
 						.build());
+		//this.callbackHandler = callbackHandler;
 						
 	}
 	
 	@Override
 	public BytePacker handleService(InetAddress clientAddress, int clientPortNumber, byte[] dataFromClient, Socket socket) {
-		// TODO Auto-generated method stub
+
 		ByteUnpacker.UnpackedMsg unpackedMsg = this.unpacker.parseByteArray(dataFromClient);
 		String accHolderName = unpackedMsg.getString(NAME);
 		int accPin = unpackedMsg.getInteger(PIN);
 		String accCurrency = unpackedMsg.getString(CURRENCY);
 		double accBalance = unpackedMsg.getDouble(BALANCE);
 		int messageId = unpackedMsg.getInteger(super.MESSAGE_ID);
-		
 		int accNum = Bank.createAccount(accHolderName, accPin, accCurrency, accBalance);
+		
 		OneByteInt status = new OneByteInt(0); 
 		String reply = String.format("Account created, account number: %d", accNum);
 		BytePacker replyMessage = super.generateReply(status, messageId, reply);

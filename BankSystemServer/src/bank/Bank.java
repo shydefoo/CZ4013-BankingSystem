@@ -25,5 +25,20 @@ public class Bank {
 		return accNum;
 	}
 	
+	public static double checkBalance(int accNum, int pin){
+		double balance = 0;
+		Account acc = AllTheAccounts.get(accNum);
+		if(acc!=null){
+			if(acc.getAccPin() == pin){
+				balance = acc.getAccBalance();
+			}
+			else balance = -2; //balance == -2 : invalid pin
+		}
+		else{
+			balance = -1; //balance == -1 : account does not exist
+		}
+		return balance;
+	}
+	
 	
 }

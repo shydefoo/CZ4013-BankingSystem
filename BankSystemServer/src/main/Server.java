@@ -24,11 +24,13 @@ public class Server {
 	private CallbackHandlerClass callbackHandler;
 	
 	public Server(int portNumber) throws SocketException{
-		this.idToServiceMap = new HashMap<>(); //Hashmap containing service id as key, service object as value
-		this.portNumber = portNumber; //Port number server is listening at
+		this.idToServiceMap = new HashMap<>();
+		this.portNumber = portNumber;
 		this.designatedSocket = new NormalSocket(new DatagramSocket(this.portNumber));
-		this.buffer = new byte[bufferSize]; //Buffer to store received data
+		this.buffer = new byte[bufferSize];
 		this.callbackHandler = new CallbackHandlerClass(this.designatedSocket);
+		
+		
 	}
 	
 	public void addServiceToServer(int id, Service service){
@@ -37,12 +39,11 @@ public class Server {
 			System.out.println("Service added");
 		}
 		else{
-			System.out.printf("There is an existing service using service id %d, please use a different id.\n",id);
+			System.out.printf("There is no existing service using service id %d, please use a different id.\n",id);
 		}		
 	}
 	
 	public void start() throws IOException{
-		//Constantly blocks for new requests
 		while(true){
 			DatagramPacket p = receive(); /*Create DatagramPacket to receive requests from clients*/
 			byte[] data = p.getData();
@@ -54,19 +55,17 @@ public class Server {
 			if(idToServiceMap.containsKey(serviceRequested)){
 				service = idToServiceMap.get(serviceRequested);
 				BytePacker replyToRequest = service.handleService(clientAddress,clientPortNumber, data, this.designatedSocket);
-				this.designatedSocket.send(replyToRequest, clientAddress, clientPortNumber); //send reply to client that made request
-				this.callbackHandler.broadcast(replyToRequest); //send update to all clients that registered for auto-monitoring.
-			}
-			else{
-				System.out.println("Invalid Service ID");
-			}
+				this.designatedSocket.send(replyToRequest, clientAddress, clientPortNumber);		
+				//To do call back service, method has to come here as well. What kind of reply depends on service requested by client.
+				this.callbackHandler.broadcast(replyToRequest);
+			}			
 		}
 	}
 	
 	public DatagramPacket receive() throws IOException{
 		Arrays.fill(buffer, (byte) 0);	//empty buffer
 		DatagramPacket p = new DatagramPacket(buffer, buffer.length);
-		System.out.println("Waiting for requests.....");
+		System.out.println("Blocking...");
 		this.designatedSocket.receive(p);
 		System.out.println("Received request.");
 		return p;

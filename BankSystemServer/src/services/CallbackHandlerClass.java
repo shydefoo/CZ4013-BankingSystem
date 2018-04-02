@@ -11,11 +11,12 @@ import message.BytePacker;
 import message.OneByteInt;
 import socket.Socket;
 
-public class CallbackHandlerClass {
+public class CallbackHandlerClass extends Service {
 	private Socket designatedSocket;
 	private static ArrayList<Subscriber> allTheSubscribers;
 	
 	public CallbackHandlerClass(Socket designatedSocket){
+		super(null);
 		this.designatedSocket = designatedSocket;
 		allTheSubscribers = new ArrayList<>();
 		
@@ -40,7 +41,8 @@ public class CallbackHandlerClass {
 				System.out.println("Removing:");
 				s.printSubscriberInfo();
 				//Before removing, need to send termination message!
-				sendTerminationMessage(s,4);
+				OneByteInt status = new OneByteInt(4);
+				sendTerminationMessage(s,status);
 				temp.add(s);
 			}
 		}
@@ -51,8 +53,10 @@ public class CallbackHandlerClass {
 		}
 	}
 	
-	public void sendTerminationMessage(Subscriber s,int status) throws IOException{
+	public void sendTerminationMessage(Subscriber s,OneByteInt status) throws IOException{
+		System.out.println("sending termination message");
 		String reply = "Auto monitoring expired.";
+		System.out.println("subscriber messageId: " + s.messageId);
 		BytePacker replyMessage = new BytePacker.Builder()
 				.setProperty(Service.STATUS, status)
 				.setProperty(Service.MESSAGE_ID, s.messageId)
@@ -70,6 +74,12 @@ public class CallbackHandlerClass {
 			}
 		}
 		
+	}
+	@Override
+	public BytePacker handleService(InetAddress clientAddress, int clientPortNumber, byte[] dataFromClient,
+			Socket socket) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	public static class Subscriber{
@@ -95,5 +105,7 @@ public class CallbackHandlerClass {
 			System.out.println("Address: " + address.toString() + ", portNumber: " + portNumber + ", messageId: " + messageId + ", expireTime: " + expireTime.getTime());
 		}
 	}
+
+	
 
 }

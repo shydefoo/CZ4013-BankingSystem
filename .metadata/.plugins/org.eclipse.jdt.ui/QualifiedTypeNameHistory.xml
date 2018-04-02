@@ -1,2 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<qualifiedTypeNameHistroy/>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="message.ByteUnpacker.TYPE"/>
+<fullyQualifiedTypeName name="socket.Socket"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="java.net.InetAddress"/>
+<fullyQualifiedTypeName name="message.BytePacker"/>
+<fullyQualifiedTypeName name="java.util.Date"/>
+<fullyQualifiedTypeName name="java.util.GregorianCalendar"/>
+<fullyQualifiedTypeName name="java.util.Calendar"/>
+<fullyQualifiedTypeName name="services.Service"/>
+<fullyQualifiedTypeName name="services.CallbackHandlerClass.Subscriber"/>
+<fullyQualifiedTypeName name="services.CallbackHandlerClass"/>
+<fullyQualifiedTypeName name="message.OneByteInt"/>
+<fullyQualifiedTypeName name="services.RegisterCallbackService"/>
+</qualifiedTypeNameHistroy>

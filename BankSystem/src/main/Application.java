@@ -5,6 +5,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
+import services.CheckBalanceService;
 import services.CreateAccountService;
 import services.RegisterCallbackService;
 
@@ -20,6 +21,7 @@ public class Application {
 			//add available service
 			client.addService(0, new CreateAccountService());
 			client.addService(4, new RegisterCallbackService());
+			client.addService(5, new CheckBalanceService());
 			
 			//hardcoded to execute service 0
 			while(true){
