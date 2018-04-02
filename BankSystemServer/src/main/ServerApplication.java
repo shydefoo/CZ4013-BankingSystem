@@ -28,7 +28,7 @@ public class ServerApplication {
 			address = InetAddress.getByName("127.0.0.1");
 			socket = new NormalSocket(new DatagramSocket(PORT_NUMBER,address));
 			server = new Server(socket);
-			//server.useSendingLossSocket(0.5);
+			server.useSendingLossSocket(0.5);
 			callbackHandler = new CallbackHandlerClass(socket);
 			//Services to be added to server
 			server.addServiceToServer(0, new CreateAccountService(callbackHandler));
