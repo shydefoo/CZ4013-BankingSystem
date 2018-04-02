@@ -1,5 +1,6 @@
 package services;
 
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import main.Console;
 import message.BytePacker;
 import message.OneByteInt;
 import socket.Socket;
@@ -27,7 +29,7 @@ public class CallbackHandlerClass {
 		//lets keep it simple for now, just add the subscriber in.
 		//To check if same port and address later. 
 		allTheSubscribers.add(subscriber); 
-		System.out.println("New subscriber added");
+		Console.debug("New subscriber added");
 		subscriber.printSubscriberInfo();
 	}
 	
@@ -37,7 +39,7 @@ public class CallbackHandlerClass {
 		ArrayList<Subscriber> temp = new ArrayList<>();
 		for (Subscriber s: allTheSubscribers){
 			if(now.after(s.expireTime.getTime())){
-				System.out.println("Removing:");
+				Console.debug("Removing:");
 				s.printSubscriberInfo();
 				//Before removing, need to send termination message!
 				OneByteInt status = new OneByteInt(4);
@@ -53,7 +55,7 @@ public class CallbackHandlerClass {
 	}
 	
 	public void sendTerminationMessage(Subscriber s,OneByteInt status) throws IOException{
-		System.out.println("Sending termination message");
+		Console.debug("Sending termination message");
 		String reply = "Auto monitoring expired.";
 		//System.out.println("subscriber messageId: " + s.messageId);
 		BytePacker replyMessage = new BytePacker.Builder()
@@ -97,12 +99,12 @@ public class CallbackHandlerClass {
 			//Calculate time to remove subscriber.
 			expireTime = Calendar.getInstance();
 			expireTime.add(Calendar.MINUTE, timeLimit);
-			System.out.println("expireTime: " + expireTime.getTime());
+			Console.debug("expireTime: " + expireTime.getTime());
 		}
 		
 		
 		public void printSubscriberInfo(){
-			System.out.println("Address: " + address.toString() + ", portNumber: " + portNumber + ", messageId: " + messageId + ", expireTime: " + expireTime.getTime());
+			Console.debug("Address: " + address.toString() + ", portNumber: " + portNumber + ", messageId: " + messageId + ", expireTime: " + expireTime.getTime());
 		}
 	}
 

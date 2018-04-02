@@ -11,12 +11,14 @@ import socket.Socket;
 public class CheckBalanceService extends Service {
 	protected final static String ACC_NUMBER = "AccountNumber";
 	protected final static String PIN = "Pin";
+	private CallbackHandlerClass callbackHandler;
 
-	public CheckBalanceService() {
+	public CheckBalanceService(CallbackHandlerClass callbackHandler) {
 		super(new ByteUnpacker.Builder()
 				.setType(ACC_NUMBER,ByteUnpacker.TYPE.INTEGER)
 				.setType(PIN, ByteUnpacker.TYPE.INTEGER)
 				.build());
+		this.callbackHandler = callbackHandler;
 		
 	}
 
@@ -31,19 +33,19 @@ public class CheckBalanceService extends Service {
 		String reply = "";
 		OneByteInt status = new OneByteInt(0);
 		if(balance==-1){
-			status.setValue(1);
 			reply = "Invalid account number. Please try again.";
 		}
 		else if(balance ==-2){
-			status.setValue(1);
 			reply = "Invalid pin number . Please try again";
 		}
 		else{
 			reply = "Current account balance: " + Double.toString(balance);
+			BytePacker replyMessageSubscriber = super.generateReply(status, messageId, reply);
+			callbackHandler.broadcast(replyMessageSubscriber);
 		}
-		BytePacker replyMessage = super.generateReply(new OneByteInt(0), messageId, reply);
+		BytePacker replyMessageClient = super.generateReply(status, messageId, reply);
 		
-		return replyMessage;
+		return replyMessageClient;
 	}
 	
 }

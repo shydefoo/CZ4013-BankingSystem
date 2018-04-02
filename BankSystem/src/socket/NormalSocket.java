@@ -30,7 +30,7 @@ public class NormalSocket implements Socket {
 	public void receive (DatagramPacket p) throws IOException {
 		// TODO Auto-generated method stub
 		this.socket.receive(p);
-		Console.debug("Receiving packet from server");
+		Console.debug("Receiving message from server");
 		return;
 	}
 

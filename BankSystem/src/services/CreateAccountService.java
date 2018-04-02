@@ -43,7 +43,7 @@ public class CreateAccountService extends Service {
 		client.send(packer);
 		
 		ByteUnpacker.UnpackedMsg unpackedMsg = receivalProcedure(client, packer, message_id);
-		if(checkStatus(unpackedMsg)){
+		if(checkStatus(unpackedMsg)){ //Check if reply status is 0. 0 means success. 
 			//String accNum = unpackedMsg.getString(Service.REPLY);
 			//Console.println("Account successfully created.");
 			//Console.println("Account number: " + accNum);	

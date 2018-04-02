@@ -32,7 +32,7 @@ public abstract class Service {
 			ByteUnpacker.UnpackedMsg unpackedMsg = this.unpacker.parseByteArray(reply.getData());
 			if(checkMsgId(message_id,unpackedMsg)) return unpackedMsg;
 			else{
-				Console.println("Message Id not the same");
+				Console.debug("Message Id not the same");
 				//Resend if request not met
 				client.send(packer);
 			}
@@ -41,8 +41,8 @@ public abstract class Service {
 	}
 	public final boolean checkMsgId(Integer message_id, ByteUnpacker.UnpackedMsg unpackedMsg){
 		Integer return_message_id = unpackedMsg.getInteger(MESSAGE_ID);
-		System.out.println("return_message_id: " + Integer.toString(return_message_id));
-		System.out.println("message_id: " + Integer.toString(message_id));
+		Console.debug("return_message_id: " + Integer.toString(return_message_id));
+		Console.debug("message_id: " + Integer.toString(message_id));
 		if(return_message_id != null){
 			return message_id == return_message_id;
 		}
@@ -51,6 +51,7 @@ public abstract class Service {
 	
 	public final boolean checkStatus(ByteUnpacker.UnpackedMsg unpackedMsg){
 		OneByteInt status = unpackedMsg.getOneByteInt(STATUS);
+		Console.debug("Status: " + status.getValue());
 		if(status.getValue()==0)return true; //0 means no error? okay. 
 		return false;
 	}

@@ -41,9 +41,10 @@ public class CreateAccountService extends Service {
 		
 		OneByteInt status = new OneByteInt(0); 
 		String reply = String.format("Account created, account number: %d", accNum);
-		BytePacker replyMessage = super.generateReply(status, messageId, reply);
-		callbackHandler.broadcast(replyMessage);
-		return replyMessage;
+		BytePacker replyMessageClient = super.generateReply(status, messageId, reply);
+		BytePacker replyMessageSubscribers = super.generateReply(status, messageId, reply);
+		callbackHandler.broadcast(replyMessageSubscribers);
+		return replyMessageClient;
 		
 		
 	}
