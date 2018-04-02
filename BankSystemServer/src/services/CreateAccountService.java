@@ -14,14 +14,16 @@ public class CreateAccountService extends Service {
 	protected final static String PIN = "Pin";
 	protected final static String CURRENCY = "Currency";
 	protected final static String BALANCE = "Balance";
+	private CallbackHandlerClass callbackHandler;
 	//private CallbackHandlerClass callbackHandler;
-	public CreateAccountService(){
+	public CreateAccountService(CallbackHandlerClass callbackHandler){
 		super(new ByteUnpacker.Builder()
 						.setType(NAME, ByteUnpacker.TYPE.STRING)
 						.setType(PIN, ByteUnpacker.TYPE.INTEGER)
 						.setType(CURRENCY, ByteUnpacker.TYPE.STRING)
 						.setType(BALANCE, ByteUnpacker.TYPE.DOUBLE)
 						.build());
+		this.callbackHandler = callbackHandler;
 		//this.callbackHandler = callbackHandler;
 						
 	}
@@ -40,7 +42,7 @@ public class CreateAccountService extends Service {
 		OneByteInt status = new OneByteInt(0); 
 		String reply = String.format("Account created, account number: %d", accNum);
 		BytePacker replyMessage = super.generateReply(status, messageId, reply);
-		
+		callbackHandler.broadcast(replyMessage);
 		return replyMessage;
 		
 		

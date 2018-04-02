@@ -11,18 +11,17 @@ import message.BytePacker;
 import message.OneByteInt;
 import socket.Socket;
 
-public class CallbackHandlerClass extends Service {
+public class CallbackHandlerClass {
 	private Socket designatedSocket;
 	private static ArrayList<Subscriber> allTheSubscribers;
 	
 	public CallbackHandlerClass(Socket designatedSocket){
-		super(null);
 		this.designatedSocket = designatedSocket;
 		allTheSubscribers = new ArrayList<>();
 		
 	}
 	
-	public static void registerSubscriber(InetAddress address, int portNumber, int messageId, int timeout){
+	public void registerSubscriber(InetAddress address, int portNumber, int messageId, int timeout){
 		Subscriber subscriber = new Subscriber(address, portNumber, messageId, timeout);
 		
 		//lets keep it simple for now, just add the subscriber in.
@@ -54,9 +53,9 @@ public class CallbackHandlerClass extends Service {
 	}
 	
 	public void sendTerminationMessage(Subscriber s,OneByteInt status) throws IOException{
-		System.out.println("sending termination message");
+		System.out.println("Sending termination message");
 		String reply = "Auto monitoring expired.";
-		System.out.println("subscriber messageId: " + s.messageId);
+		//System.out.println("subscriber messageId: " + s.messageId);
 		BytePacker replyMessage = new BytePacker.Builder()
 				.setProperty(Service.STATUS, status)
 				.setProperty(Service.MESSAGE_ID, s.messageId)
@@ -65,21 +64,22 @@ public class CallbackHandlerClass extends Service {
 		designatedSocket.send(replyMessage, s.address, s.portNumber);
 	}
 	
-	public void broadcast(BytePacker msg) throws IOException{
-		checkValidity();
-		if(((OneByteInt)msg.getPropToValue().get(Service.getStatus())).getValue()==0){ //Only if reply status is 0, then broadcast out. 
-			for (Subscriber s: allTheSubscribers){
-				msg.getPropToValue().put(Service.MESSAGE_ID, s.messageId); //replace msgId of reply to whoever that made the action of with msgId of subscriber.
-				designatedSocket.send(msg, s.address, s.portNumber);
+	public void broadcast(BytePacker msg){
+		try {
+			checkValidity();
+			if(((OneByteInt)msg.getPropToValue().get(Service.getStatus())).getValue()==0){ //Only if reply status is 0, then broadcast out. 
+				for (Subscriber s: allTheSubscribers){
+					msg.getPropToValue().put(Service.MESSAGE_ID, s.messageId); //replace msgId of reply to whoever that made the action of with msgId of subscriber.
+					designatedSocket.send(msg, s.address, s.portNumber);
+				}
 			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Error broadcasting");
+			e.printStackTrace();
 		}
 		
-	}
-	@Override
-	public BytePacker handleService(InetAddress clientAddress, int clientPortNumber, byte[] dataFromClient,
-			Socket socket) {
-		// TODO Auto-generated method stub
-		return null;
+		
 	}
 	
 	public static class Subscriber{

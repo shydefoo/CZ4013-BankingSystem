@@ -11,11 +11,12 @@ import socket.Socket;
 public class RegisterCallbackService extends Service {
 	
 	protected final static String TIMEOUT = "timeout";
-
-	public RegisterCallbackService() {
+	private CallbackHandlerClass callbackHandler;
+	public RegisterCallbackService(CallbackHandlerClass callbackHandler) {
 		super(new ByteUnpacker.Builder()
 				.setType(TIMEOUT, ByteUnpacker.TYPE.INTEGER)
 				.build());
+		this.callbackHandler = callbackHandler; 
 		
 	}
 
@@ -27,8 +28,8 @@ public class RegisterCallbackService extends Service {
 		int messageId = unpackedMsg.getInteger(Service.MESSAGE_ID);
 		int timeout = unpackedMsg.getInteger(TIMEOUT);
 		//Create subscriber object
-		CallbackHandlerClass.registerSubscriber(clientAddress, clientPortNumber, messageId, timeout);
-		OneByteInt status = new OneByteInt(2);
+		callbackHandler.registerSubscriber(clientAddress, clientPortNumber, messageId, timeout);
+		OneByteInt status = new OneByteInt(0);
 		String reply = "Auto-monitoring registered, waiting for updates...";
 		BytePacker replyMessage = super.generateReply(status, messageId, reply);
 		return replyMessage;

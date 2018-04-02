@@ -21,14 +21,12 @@ public class Server {
 	private String ipAddress;
 	private final int bufferSize = 2048;
 	private byte[] buffer;
-	private CallbackHandlerClass callbackHandler;
 	
-	public Server(int portNumber) throws SocketException{
+	public Server(Socket socket) throws SocketException{
 		this.idToServiceMap = new HashMap<>();
 		this.portNumber = portNumber;
-		this.designatedSocket = new NormalSocket(new DatagramSocket(this.portNumber));
+		this.designatedSocket = socket;
 		this.buffer = new byte[bufferSize];
-		this.callbackHandler = new CallbackHandlerClass(this.designatedSocket);
 		
 		
 	}
@@ -57,7 +55,7 @@ public class Server {
 				BytePacker replyToRequest = service.handleService(clientAddress,clientPortNumber, data, this.designatedSocket);
 				this.designatedSocket.send(replyToRequest, clientAddress, clientPortNumber);		
 				//To do call back service, method has to come here as well. What kind of reply depends on service requested by client.
-				this.callbackHandler.broadcast(replyToRequest);
+				
 			}			
 		}
 	}
