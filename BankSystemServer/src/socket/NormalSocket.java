@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketException;
 
+import main.Console;
 import message.BytePacker;
 
 public class NormalSocket implements Socket {
@@ -17,6 +19,7 @@ public class NormalSocket implements Socket {
 	
 	@Override
 	public void send(BytePacker msg, InetAddress address, int port) throws IOException {
+		Console.debug("Port: " + port);
 		byte[] message = msg.getByteArray();
 		DatagramPacket p = new DatagramPacket(message, message.length,address, port);
 		send(p);
@@ -38,8 +41,8 @@ public class NormalSocket implements Socket {
 	}
 
 	@Override
-	public void setTimeOut() {
-		// TODO Auto-generated method stub
+	public void setTimeOut(int timeout) throws SocketException {
+		this.socket.setSoTimeout(timeout);
 		return;
 	}
 

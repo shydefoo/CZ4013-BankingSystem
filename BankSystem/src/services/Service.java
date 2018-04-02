@@ -2,6 +2,7 @@ package services;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
+import java.net.SocketTimeoutException;
 
 import main.Client;
 import main.Console;
@@ -28,14 +29,16 @@ public abstract class Service {
 	
 	public final ByteUnpacker.UnpackedMsg receivalProcedure(Client client, BytePacker packer, int message_id ) throws IOException{
 		while(true){
-			DatagramPacket reply = client.receive();
-			ByteUnpacker.UnpackedMsg unpackedMsg = this.unpacker.parseByteArray(reply.getData());
-			if(checkMsgId(message_id,unpackedMsg)) return unpackedMsg;
-			else{
-				Console.debug("Message Id not the same");
-				//Resend if request not met
+			try{
+				DatagramPacket reply = client.receive();
+				ByteUnpacker.UnpackedMsg unpackedMsg = this.unpacker.parseByteArray(reply.getData());
+				if(checkMsgId(message_id,unpackedMsg)) return unpackedMsg;
+			}catch (SocketTimeoutException e){
+				//If socket receive function timeout, catch exception, resend request. Stays here until reply received? okay. 
+				Console.debug("Socket timeout.");
 				client.send(packer);
 			}
+			
 			
 		}
 	}

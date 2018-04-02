@@ -13,10 +13,11 @@ public class Application {
 	public static void main(String[] args){
 		String serverIpAddress = "127.0.0.1"; //need to change if using a different computer on the network
 		int serverPortNumber = 8000; //designated port number
+		int timeout = 0;
 		Console console = new Console(new Scanner(System.in));
 				
 		try {
-			Client client = new Client(serverIpAddress, serverPortNumber);
+			Client client = new Client(serverIpAddress, serverPortNumber, timeout);
 			
 			//add available service
 			client.addService(0, new CreateAccountService());

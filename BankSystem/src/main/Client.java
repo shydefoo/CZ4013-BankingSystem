@@ -29,19 +29,18 @@ public class Client {
 	private int serverPortNumber = 0;
 	private InetAddress InetIpAddress = null;
 	private int message_id = 0;
+	private int timeout = 0;
 	//buffer
     private byte[] buffer = new byte[BUFFER_SIZE];
 	
-	
-	
-	
-
-	public Client(String ipAddress, int portNumber) throws UnknownHostException, SocketException{
+	public Client(String ipAddress, int portNumber, int timeout) throws UnknownHostException, SocketException{
 		this.idToServiceMap = new HashMap<>();
 		this.serverIpAddress = ipAddress;
 		this.InetIpAddress = InetAddress.getByName(ipAddress);
 		this.designatedSocket = new NormalSocket(new DatagramSocket());
 		this.serverPortNumber = portNumber;
+		this.timeout = timeout; //Datagramsocket timeout on receive functions, in ms. 
+		this.designatedSocket.setTimeOut(timeout);
 	}
 	
 	public int getMessage_id() {

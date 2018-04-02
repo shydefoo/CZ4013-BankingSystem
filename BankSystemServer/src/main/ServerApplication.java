@@ -2,6 +2,7 @@ package main;
 
 import java.io.IOException;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.SocketException;
 
 import bank.Bank;
@@ -16,14 +17,17 @@ public class ServerApplication {
 	private static Server server;
 	private static Bank bank;
 	private static CallbackHandlerClass callbackHandler;
+	private static InetAddress address;
 	private static Socket socket;
 	private static final int PORT_NUMBER = 8000;
 	public static void main(String[] args){
 		try {
 			System.out.println("Starting server");
 			bank = new Bank();
-			socket = new NormalSocket(new DatagramSocket(PORT_NUMBER));
+			address = InetAddress.getByName("127.0.0.1");
+			socket = new NormalSocket(new DatagramSocket(PORT_NUMBER,address));
 			server = new Server(socket);
+			server.useReceivingLossSocket(0.1);
 			callbackHandler = new CallbackHandlerClass(socket);
 			//Services to be added to server
 			server.addServiceToServer(0, new CreateAccountService(callbackHandler));
