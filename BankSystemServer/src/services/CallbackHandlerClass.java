@@ -26,11 +26,29 @@ public class CallbackHandlerClass {
 	public void registerSubscriber(InetAddress address, int portNumber, int messageId, int timeout){
 		Subscriber subscriber = new Subscriber(address, portNumber, messageId, timeout);
 		
-		//lets keep it simple for now, just add the subscriber in.
-		//To check if same port and address later. 
-		allTheSubscribers.add(subscriber); 
-		Console.debug("New subscriber added");
-		subscriber.printSubscriberInfo();
+		//Check if client has already subscribed to callbackService or not 
+		if(checkExisting(address,portNumber,messageId,timeout)){
+			allTheSubscribers.add(subscriber); 
+			Console.debug("New subscriber added");
+			subscriber.printSubscriberInfo();
+		}
+		else{
+			Console.debug("Client exists in list of subscribers");
+		}
+		
+	}
+	
+	public boolean checkExisting(InetAddress address, int portNumber, int messageId, int timeout){
+		//Console.debug("Check Existing");
+		boolean DoesNotExists = true; //set to true, means no such subscriber
+		for(Subscriber s: allTheSubscribers){
+			s.printSubscriberInfo();
+			if(s.address.equals(address) && s.portNumber==portNumber && s.messageId == messageId){
+				DoesNotExists = false;
+				break;
+			}
+		}
+		return DoesNotExists;
 	}
 	
 	
