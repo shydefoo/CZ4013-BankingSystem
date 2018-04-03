@@ -78,10 +78,12 @@ public abstract class Service {
 		return false;
 	}
 	
-	public abstract void executeRequest(Console console, Client client) throws IOException;
+	
 	public ByteUnpacker getUnpacker() {
 		return unpacker;
 	}
 	
+	public abstract void executeRequest(Console console, Client client) throws IOException;
+	public abstract String ServiceName(); 
 	
 }

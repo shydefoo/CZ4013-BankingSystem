@@ -54,5 +54,10 @@ public class CreateAccountService extends Service {
 			Console.println("Account create failed");
 		}
 	}
+	
+	@Override
+	public String ServiceName() {
+		return "Create Account";
+	}
 
 }

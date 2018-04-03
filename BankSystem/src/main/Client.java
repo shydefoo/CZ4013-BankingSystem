@@ -92,6 +92,11 @@ public class Client {
 		this.designatedSocket = new SendingLossSocket(this.designatedSocket, probability);
 	}
 	
+	public void printMenu(){
+		for(Integer serviceId : idToServiceMap.keySet()){
+			Console.println(String.format("%d: %s", serviceId, idToServiceMap.get(serviceId).ServiceName()));
+		}
+	}
 	
 	
 }

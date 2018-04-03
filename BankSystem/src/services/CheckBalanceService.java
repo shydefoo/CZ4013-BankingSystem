@@ -39,6 +39,13 @@ public class CheckBalanceService extends Service {
 		}
 		
 		
-	}						
+	}
+
+	@Override
+	public String ServiceName() {
+		return "Check Balance";
+	}	
+	
+	
 
 }

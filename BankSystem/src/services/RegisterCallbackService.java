@@ -67,6 +67,11 @@ public class RegisterCallbackService extends Service{
 	
 	}
 	
+	@Override
+	public String ServiceName() {
+		return "Register Callback";
+	}
+	
 	
 	
 

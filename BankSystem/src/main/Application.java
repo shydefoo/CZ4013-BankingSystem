@@ -23,9 +23,10 @@ public class Application {
 			client.addService(0, new CreateAccountService());
 			client.addService(4, new RegisterCallbackService());
 			client.addService(5, new CheckBalanceService());
-			client.useReceivingLossSocket(0.5);
+			client.useReceivingLossSocket(0.1);
 			//hardcoded to execute service 0
 			while(true){
+				client.printMenu();
 				int serviceNumber = console.askForInteger("Enter service request: ");
 				if(serviceNumber ==-1) break;
 				client.execute(serviceNumber, console);
