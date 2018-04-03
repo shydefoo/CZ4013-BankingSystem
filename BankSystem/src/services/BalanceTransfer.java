@@ -43,4 +43,9 @@ public class BalanceTransfer extends Service {
 			Console.println("Transfer failed");
 		}
 	}
+	
+	@Override
+	public String ServiceName() {
+		return "Transfer Funds";
+	}
 }

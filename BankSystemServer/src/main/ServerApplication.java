@@ -37,8 +37,8 @@ public class ServerApplication {
 			//Services to be added to server
 			server.addServiceToServer(0, new CreateAccountService(callbackHandler));
 			server.addServiceToServer(1, new CloseAccountService(callbackHandler));
-			server.addServiceToServer(2, new BalanceUpdate());
-			server.addServiceToServer(3, new BalanceTransfer());
+			server.addServiceToServer(2, new BalanceUpdate(callbackHandler));
+			server.addServiceToServer(3, new BalanceTransfer(callbackHandler));
 			server.addServiceToServer(4, new RegisterCallbackService(callbackHandler));
 			server.addServiceToServer(5, new CheckBalanceService(callbackHandler));
 			////////////////

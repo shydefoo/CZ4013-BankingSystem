@@ -40,9 +40,11 @@ public class CreateAccountService extends Service {
 		int accNum = Bank.createAccount(accHolderName, accPin, accCurrency, accBalance);
 		
 		OneByteInt status = new OneByteInt(0); 
-		String reply = String.format("Account created, account number: %d", accNum);
+		String reply = String.format("Account created ----------- \n Account Holder name: %s \n Account number: %d \n Currency: %s \n Balance: %f \n --------- ",accHolderName, accNum, accCurrency, accBalance);
 		BytePacker replyMessageClient = super.generateReply(status, messageId, reply);
-		BytePacker replyMessageSubscribers = super.generateReply(status, messageId, reply);
+		
+		String toSubscribers = String.format("%s created an account. Account number: %d", accHolderName, accNum);
+		BytePacker replyMessageSubscribers = super.generateReply(status, messageId, toSubscribers);
 		callbackHandler.broadcast(replyMessageSubscribers);
 		return replyMessageClient;
 		
