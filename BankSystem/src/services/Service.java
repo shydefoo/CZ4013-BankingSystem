@@ -2,6 +2,7 @@ package services;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.SocketTimeoutException;
 
 import main.Client;
@@ -9,6 +10,9 @@ import main.Console;
 import message.BytePacker;
 import message.ByteUnpacker;
 import message.OneByteInt;
+import socket.NormalSocket;
+import socket.Socket;
+import socket.WrapperSocket;
 
 public abstract class Service {
 	
@@ -37,7 +41,8 @@ public abstract class Service {
 	public final ByteUnpacker.UnpackedMsg receivalProcedure(Client client, BytePacker packer, int message_id ) throws IOException{
 		while(true){
 			try{
-
+				//DatagramSocket tempSocket = ((NormalSocket) ((WrapperSocket)client.getDesignatedSocket()).getSocket()).getSocket();
+				//Console.debug("bufferSize: "+ tempSocket.getReceiveBufferSize());
 				DatagramPacket reply = client.receive();
 				ByteUnpacker.UnpackedMsg unpackedMsg = this.getUnpacker().parseByteArray(reply.getData());
 				if(checkMsgId(message_id,unpackedMsg)) return unpackedMsg;

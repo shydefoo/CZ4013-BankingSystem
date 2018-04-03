@@ -78,7 +78,7 @@ public class CallbackHandlerClass {
 		//System.out.println("subscriber messageId: " + s.messageId);
 		BytePacker replyMessage = new BytePacker.Builder()
 				.setProperty(Service.STATUS, status)
-				.setProperty(Service.MESSAGE_ID, s.messageId)
+				.setProperty(Service.getMessageId(), s.messageId)
 				.setProperty(Service.REPLY, reply)
 				.build();
 		designatedSocket.send(replyMessage, s.address, s.portNumber);
@@ -90,7 +90,7 @@ public class CallbackHandlerClass {
 			if(((OneByteInt)msg.getPropToValue().get(Service.getStatus())).getValue()==0){ //Only if reply status is 0, then broadcast out. 
 				Console.debug("Sending packets to subscribers:");
 				for (Subscriber s: allTheSubscribers){
-					msg.getPropToValue().put(Service.MESSAGE_ID, s.messageId); //replace msgId of reply to whoever that made the action of with msgId of subscriber.
+					msg.getPropToValue().put(Service.getMessageId(), s.messageId); //replace msgId of reply to whoever that made the action of with msgId of subscriber.
 					designatedSocket.send(msg, s.address, s.portNumber);
 				}
 			}

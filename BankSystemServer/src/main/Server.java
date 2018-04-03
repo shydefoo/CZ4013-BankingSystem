@@ -17,12 +17,12 @@ import socket.SendingLossSocket;
 import socket.Socket;
 
 public class Server {
-	private HashMap<Integer, Service> idToServiceMap;
-	private Socket designatedSocket;
-	private int portNumber;
-	private String ipAddress;
-	private final int bufferSize = 2048;
-	private byte[] buffer;
+	protected HashMap<Integer, Service> idToServiceMap;
+	protected Socket designatedSocket;
+	protected int portNumber;
+	protected String ipAddress;
+	protected final int bufferSize = 2048;
+	protected byte[] buffer;
 	
 	public Server(Socket socket) throws SocketException{
 		this.idToServiceMap = new HashMap<>();
@@ -51,7 +51,6 @@ public class Server {
 				int clientPortNumber = p.getPort();
 				//Service ID from client is the first byte in the byte array sent from client
 				int serviceRequested = data[0];
-				
 				Service service = null;
 				if(idToServiceMap.containsKey(serviceRequested)){
 					service = idToServiceMap.get(serviceRequested);

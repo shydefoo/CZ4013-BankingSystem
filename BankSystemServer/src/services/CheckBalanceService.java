@@ -25,10 +25,10 @@ public class CheckBalanceService extends Service {
 	@Override
 	public BytePacker handleService(InetAddress clientAddress, int clientPortNumber, byte[] dataFromClient,
 			Socket socket) {
-		ByteUnpacker.UnpackedMsg unpackedMsg = this.unpacker.parseByteArray(dataFromClient);
+		ByteUnpacker.UnpackedMsg unpackedMsg = this.getUnpacker().parseByteArray(dataFromClient);
 		int accNum = unpackedMsg.getInteger(ACC_NUMBER);
 		int pin = unpackedMsg.getInteger(PIN);
-		int messageId = unpackedMsg.getInteger(MESSAGE_ID);
+		int messageId = unpackedMsg.getInteger(getMessageId());
 		double balance = Bank.checkBalance(accNum,pin);
 		String reply = "";
 		OneByteInt status = new OneByteInt(0);

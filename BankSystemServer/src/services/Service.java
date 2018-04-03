@@ -16,24 +16,24 @@ public abstract class Service {
 	 * 2 - Auto monitoring update
 	 * 4 - Auto monitoring expired
 	 * */
-	ByteUnpacker unpacker;
+	private ByteUnpacker unpacker;
 	protected static final String SERVICE_ID = "serviceId";
-	protected static final String MESSAGE_ID = "messageId";
+	private static final String MESSAGE_ID = "messageId";
 	protected static final String STATUS = "status";
     protected static final String REPLY = "reply";
     
 	public Service(ByteUnpacker unpacker){
-		this.unpacker = new ByteUnpacker.Builder()
+		this.setUnpacker(new ByteUnpacker.Builder()
 						.setType(SERVICE_ID, ByteUnpacker.TYPE.ONE_BYTE_INT)
-						.setType(MESSAGE_ID, ByteUnpacker.TYPE.INTEGER)
+						.setType(getMessageId(), ByteUnpacker.TYPE.INTEGER)
 						.build()
-						.defineComponents(unpacker);
+						.defineComponents(unpacker));
 	}
 	
 	public BytePacker generateReply(OneByteInt status, int messageId, String reply){
 		BytePacker replyMessage = new BytePacker.Builder()
 							.setProperty(STATUS, status)
-							.setProperty(MESSAGE_ID, messageId)
+							.setProperty(getMessageId(), messageId)
 							.setProperty(REPLY, reply)
 							.build();
 		return replyMessage;
@@ -44,4 +44,16 @@ public abstract class Service {
 	
 	public abstract BytePacker handleService(InetAddress clientAddress, int clientPortNumber, byte[] dataFromClient, Socket socket);
 	public abstract String ServiceName();
+
+	public ByteUnpacker getUnpacker() {
+		return unpacker;
+	}
+
+	public void setUnpacker(ByteUnpacker unpacker) {
+		this.unpacker = unpacker;
+	}
+
+	public static String getMessageId() {
+		return MESSAGE_ID;
+	}
 }
