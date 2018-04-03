@@ -81,20 +81,21 @@ public class Bank {
 	}
 	
 	public static int closeAccount(String accOwner, int accNum, int pin){
-		//Generate account number. For now...Use size of hash map. Account number should be an integer. 
 		Account temp = AllTheAccounts.get(accNum);
-		if(AllTheAccounts.get(accNum) == null) {
+		if(temp!=null){
+			Console.debug("Not null");
+			if(temp.getAccPin()==pin){
+				AllTheAccounts.remove(accNum);
+				return 1;
+			}
+			else{
+				return -2;
+			}
+		}
+		else{
+			Console.debug("hmmmm");
 			return -1;
 		}
-		
-		if(temp.getAccPin() != pin) {
-			return -2;
-		}
-		AllTheAccounts.remove(accNum);
-		if(AllTheAccounts.get(accNum) != null) {
-			return 0;
-		}
-		return 1;
 	}
 	public static double transferBalance(String accOwner, int accNum, int receiver, int pin, double amount){
 		

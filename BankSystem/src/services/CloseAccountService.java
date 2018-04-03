@@ -48,7 +48,7 @@ public class CloseAccountService extends Service {
 			Console.println(reply);
 		}
 		else{
-			Console.println("Account create failed");
+			Console.println("Account close failed");
 		}
 	}
 	

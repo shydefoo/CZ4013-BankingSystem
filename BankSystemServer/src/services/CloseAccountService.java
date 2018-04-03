@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 
 import bank.Bank;
+import main.Console;
 import message.BytePacker;
 import message.ByteUnpacker;
 import message.OneByteInt;
@@ -18,8 +19,8 @@ public class CloseAccountService extends Service {
 	public CloseAccountService(CallbackHandlerClass callbackHandler){
 		super(new ByteUnpacker.Builder()
 						.setType(NAME, ByteUnpacker.TYPE.STRING)
-						.setType(PIN, ByteUnpacker.TYPE.INTEGER)
 						.setType(ACCNUM, ByteUnpacker.TYPE.INTEGER)
+						.setType(PIN, ByteUnpacker.TYPE.INTEGER)
 						.build());
 		this.callbackHandler = callbackHandler;
 		//this.callbackHandler = callbackHandler;
@@ -31,14 +32,16 @@ public class CloseAccountService extends Service {
 		String reply = "";
 		ByteUnpacker.UnpackedMsg unpackedMsg = this.getUnpacker().parseByteArray(dataFromClient);
 		String accHolderName = unpackedMsg.getString(NAME);
-		int accPin = unpackedMsg.getInteger(PIN);
 		int accNum = unpackedMsg.getInteger(ACCNUM);
+		int accPin = unpackedMsg.getInteger(PIN);
+		Console.debug("accNum: " + accNum);
 		int messageId = unpackedMsg.getInteger(super.getMessageId());
-		int ret = Bank.closeAccount(accHolderName,accNum , accPin);
+		int ret = Bank.closeAccount(accHolderName,accNum ,accPin);
 		OneByteInt status = new OneByteInt(0); 
 		if (ret == 1){
-			 reply = String.format("---------------\nAccount %d successfully deleted\n--------------- ", accNum);
-			 BytePacker replyMessageSubscribers = super.generateReply(status, messageId, reply);
+			Console.debug("HERE");
+			reply = String.format("---------------\nAccount %d successfully deleted\n--------------- ", accNum);
+			BytePacker replyMessageSubscribers = super.generateReply(status, messageId, reply);
 			callbackHandler.broadcast(replyMessageSubscribers);
 		}
 		else if(ret==-1){
