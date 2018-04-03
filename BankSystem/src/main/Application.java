@@ -6,8 +6,13 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 import services.CheckBalanceService;
+import services.CloseAccountService;
 import services.CreateAccountService;
 import services.RegisterCallbackService;
+import services.BalanceTransfer;
+import services.BalanceUpdate;
+
+
 
 public class Application {
 	public static void main(String[] args){
@@ -20,6 +25,9 @@ public class Application {
 			
 			//add available service
 			client.addService(0, new CreateAccountService());
+			client.addService(1, new CloseAccountService());
+			client.addService(2, new BalanceUpdate());
+			client.addService(3, new BalanceTransfer());
 			client.addService(4, new RegisterCallbackService());
 			client.addService(5, new CheckBalanceService());
 			
