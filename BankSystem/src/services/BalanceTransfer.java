@@ -36,8 +36,8 @@ public class BalanceTransfer extends Service {
 		
 		ByteUnpacker.UnpackedMsg unpackedMsg = receivalProcedure(client, packer, message_id);
 		if(checkStatus(unpackedMsg)){
-			String Balance = unpackedMsg.getString(Service.REPLY);
-			Console.println("Current Balance: " + Balance);	
+			String reply = unpackedMsg.getString(Service.REPLY);
+			Console.println(reply);	
 		}
 		else{
 			Console.println("Transfer failed");

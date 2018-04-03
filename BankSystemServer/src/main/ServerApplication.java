@@ -30,9 +30,18 @@ public class ServerApplication {
 			bank = new Bank();
 			address = InetAddress.getByName("127.0.0.1");
 			socket = new NormalSocket(new DatagramSocket(PORT_NUMBER,address));
-			//server = new Server(socket);
-			server = new AtMostOnceServer(socket);
-			//server.useSendingLossSocket(0.5);
+			Console.debug_info = false;
+			
+			/*Specify type of server*/
+			//server = new Server(socket); //at-least-once server 
+			server = new AtMostOnceServer(socket); //at-most-once server
+			
+			/*Specify what type of socket to use*/
+			double probability = 0.5;
+			server.useSendingLossSocket(probability);
+			
+			
+			
 			callbackHandler = new CallbackHandlerClass(socket);
 			//Services to be added to server
 			server.addServiceToServer(0, new CreateAccountService(callbackHandler));

@@ -50,8 +50,8 @@ public class BalanceTransfer extends Service {
 			reply = "Insufficient funds. Current balance: " + Bank.checkBalance(accNum, accPin);
 		}
 		else{
-			reply = String.format("--------------------\nFunds Transfer\nFrom: %d\nTo: %d\nAmount:%f\nBalance: %f\n---------------", accNum,receiver,amount,accBalance);
-			String replyToSubscribers = String.format("%f transferred from acc number: %d to acc number: %d", amount, accNum,receiver);
+			reply = String.format("--------------------\nFunds Transfer\nFrom: %d\nTo: %d\nAmount:%.2f\nBalance: %.2f\n---------------", accNum,receiver,amount,accBalance);
+			String replyToSubscribers = String.format("%.2f transferred from acc number: %d to acc number: %d", amount, accNum,receiver);
 			BytePacker replyMessageToSubcribers = super.generateReply(status, messageId, replyToSubscribers);
 			callbackHandler.broadcast(replyMessageToSubcribers);
 			

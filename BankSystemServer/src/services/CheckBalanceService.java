@@ -32,14 +32,14 @@ public class CheckBalanceService extends Service {
 		double balance = Bank.checkBalance(accNum,pin);
 		String reply = "";
 		OneByteInt status = new OneByteInt(0);
-		if(balance==-1){
+		if(balance == -1){
 			reply = "Invalid account number. Please try again.";
 		}
-		else if(balance ==-2){
+		else if(balance == -2){
 			reply = "Invalid pin number . Please try again";
 		}
 		else{
-			reply = "Current account balance: " + Double.toString(balance);
+			reply = String.format("------------------------------\nAcc Number: %d\nCurrent account balance: %.2f\n------------------",accNum,  balance);
 			BytePacker replyMessageSubscriber = super.generateReply(status, messageId, reply);
 			callbackHandler.broadcast(replyMessageSubscriber);
 		}

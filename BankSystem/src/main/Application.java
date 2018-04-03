@@ -31,8 +31,13 @@ public class Application {
 			client.addService(3, new BalanceTransfer());
 			client.addService(4, new RegisterCallbackService());
 			client.addService(5, new CheckBalanceService());
-			//client.useReceivingLossSocket(0.1);
-			//hardcoded to execute service 0
+			
+			Console.debug_info = false;
+			/*Specify what type of socket to use*/
+			//double probability = 0.5;
+			//client.useReceivingLossSocket(probability);
+			//client.useSendingLossSocket(probability);
+			
 			while(true){
 				client.printMenu();
 				int serviceNumber = console.askForInteger("Enter service request: ");

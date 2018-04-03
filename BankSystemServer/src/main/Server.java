@@ -54,7 +54,7 @@ public class Server {
 				Service service = null;
 				if(idToServiceMap.containsKey(serviceRequested)){
 					service = idToServiceMap.get(serviceRequested);
-					Console.debug("Service Requested: " + service.ServiceName());
+					System.out.println("Service Requested: " + service.ServiceName());
 					BytePacker replyToRequest = service.handleService(clientAddress,clientPortNumber, data, this.designatedSocket);
 					this.designatedSocket.send(replyToRequest, clientAddress, clientPortNumber);		
 					//To do call back service, method has to come here as well. What kind of reply depends on service requested by client.
@@ -69,9 +69,9 @@ public class Server {
 	public DatagramPacket receive() throws IOException{
 		Arrays.fill(buffer, (byte) 0);	//empty buffer
 		DatagramPacket p = new DatagramPacket(buffer, buffer.length);
-		System.out.println("Blocking...");
+		System.out.println("Waiting for request...");
 		this.designatedSocket.receive(p);
-		System.out.println("Received request.");
+		
 		return p;
 	}
 	
