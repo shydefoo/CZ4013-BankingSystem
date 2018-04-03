@@ -34,14 +34,18 @@ public class CheckBalanceService extends Service {
 		client.send(packer);
 		ByteUnpacker.UnpackedMsg unpackedMsg = receivalProcedure(client, packer, messageId);
 		if(checkStatus(unpackedMsg)){
-			//String accNum = unpackedMsg.getString(Service.REPLY);
-			//Console.println("Account successfully created.");
-			//Console.println("Account number: " + accNum);	
 			String reply = unpackedMsg.getString(Service.REPLY);
 			Console.println(reply);
 		}
 		
 		
-	}						
+	}
+
+	@Override
+	public String ServiceName() {
+		return "Check Balance";
+	}	
+	
+	
 
 }

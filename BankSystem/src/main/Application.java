@@ -18,10 +18,11 @@ public class Application {
 	public static void main(String[] args){
 		String serverIpAddress = "127.0.0.1"; //need to change if using a different computer on the network
 		int serverPortNumber = 8000; //designated port number
+		int timeout = 5;
 		Console console = new Console(new Scanner(System.in));
 				
 		try {
-			Client client = new Client(serverIpAddress, serverPortNumber);
+			Client client = new Client(serverIpAddress, serverPortNumber, timeout*1000);
 			
 			//add available service
 			client.addService(0, new CreateAccountService());
@@ -30,9 +31,10 @@ public class Application {
 			client.addService(3, new BalanceTransfer());
 			client.addService(4, new RegisterCallbackService());
 			client.addService(5, new CheckBalanceService());
-			
+			client.useReceivingLossSocket(0.1);
 			//hardcoded to execute service 0
 			while(true){
+				client.printMenu();
 				int serviceNumber = console.askForInteger("Enter service request: ");
 				if(serviceNumber ==-1) break;
 				client.execute(serviceNumber, console);

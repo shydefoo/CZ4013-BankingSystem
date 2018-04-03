@@ -12,19 +12,20 @@ import message.BytePacker;
 import services.CallbackHandlerClass;
 import services.Service;
 import socket.NormalSocket;
+import socket.ReceivingLossSocket;
+import socket.SendingLossSocket;
 import socket.Socket;
 
 public class Server {
-	private HashMap<Integer, Service> idToServiceMap;
-	private Socket designatedSocket;
-	private int portNumber;
-	private String ipAddress;
-	private final int bufferSize = 2048;
-	private byte[] buffer;
+	protected HashMap<Integer, Service> idToServiceMap;
+	protected Socket designatedSocket;
+	protected int portNumber;
+	protected String ipAddress;
+	protected final int bufferSize = 2048;
+	protected byte[] buffer;
 	
 	public Server(Socket socket) throws SocketException{
 		this.idToServiceMap = new HashMap<>();
-		this.portNumber = portNumber;
 		this.designatedSocket = socket;
 		this.buffer = new byte[bufferSize];
 		
@@ -43,20 +44,25 @@ public class Server {
 	
 	public void start() throws IOException{
 		while(true){
-			DatagramPacket p = receive(); /*Create DatagramPacket to receive requests from clients*/
-			byte[] data = p.getData();
-			InetAddress clientAddress = p.getAddress();
-			int clientPortNumber = p.getPort();
-			//Service ID from client is the first byte in the byte array sent from client
-			int serviceRequested = data[0];
-			Service service = null;
-			if(idToServiceMap.containsKey(serviceRequested)){
-				service = idToServiceMap.get(serviceRequested);
-				BytePacker replyToRequest = service.handleService(clientAddress,clientPortNumber, data, this.designatedSocket);
-				this.designatedSocket.send(replyToRequest, clientAddress, clientPortNumber);		
-				//To do call back service, method has to come here as well. What kind of reply depends on service requested by client.
-				
-			}			
+			DatagramPacket p = receive(); /*Create DatagramPacket to receive requests from clients, assumes that it has no problem receiving.*/
+			if(p.getLength()!=0){
+				byte[] data = p.getData();
+				InetAddress clientAddress = p.getAddress();
+				int clientPortNumber = p.getPort();
+				//Service ID from client is the first byte in the byte array sent from client
+				int serviceRequested = data[0];
+				Service service = null;
+				if(idToServiceMap.containsKey(serviceRequested)){
+					service = idToServiceMap.get(serviceRequested);
+					Console.debug("Service Requested: " + service.ServiceName());
+					BytePacker replyToRequest = service.handleService(clientAddress,clientPortNumber, data, this.designatedSocket);
+					this.designatedSocket.send(replyToRequest, clientAddress, clientPortNumber);		
+					//To do call back service, method has to come here as well. What kind of reply depends on service requested by client.
+				}	
+			}else{
+				Console.debug("Nothing received");
+			}
+					
 		}
 	}
 	
@@ -67,5 +73,12 @@ public class Server {
 		this.designatedSocket.receive(p);
 		System.out.println("Received request.");
 		return p;
+	}
+	
+	public void useSendingLossSocket(double probability){
+		this.designatedSocket = new SendingLossSocket(this.designatedSocket, probability);
+	}
+	public void useReceivingLossSocket(double probability){
+		this.designatedSocket = new ReceivingLossSocket(this.designatedSocket, probability);
 	}
 }

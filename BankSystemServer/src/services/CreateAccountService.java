@@ -31,12 +31,12 @@ public class CreateAccountService extends Service {
 	@Override
 	public BytePacker handleService(InetAddress clientAddress, int clientPortNumber, byte[] dataFromClient, Socket socket) {
 
-		ByteUnpacker.UnpackedMsg unpackedMsg = this.unpacker.parseByteArray(dataFromClient);
+		ByteUnpacker.UnpackedMsg unpackedMsg = this.getUnpacker().parseByteArray(dataFromClient);
 		String accHolderName = unpackedMsg.getString(NAME);
 		int accPin = unpackedMsg.getInteger(PIN);
 		String accCurrency = unpackedMsg.getString(CURRENCY);
 		double accBalance = unpackedMsg.getDouble(BALANCE);
-		int messageId = unpackedMsg.getInteger(super.MESSAGE_ID);
+		int messageId = unpackedMsg.getInteger(super.getMessageId());
 		int accNum = Bank.createAccount(accHolderName, accPin, accCurrency, accBalance);
 		
 		OneByteInt status = new OneByteInt(0); 
@@ -47,5 +47,10 @@ public class CreateAccountService extends Service {
 		return replyMessageClient;
 		
 		
+	}
+
+	@Override
+	public String ServiceName() {
+		return "Create Account";
 	}
 }

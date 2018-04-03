@@ -2,6 +2,8 @@ package bank;
 
 import java.util.HashMap;
 
+import main.Console;
+
 public class Bank {
 	public static HashMap<Integer, Account> AllTheAccounts;
 	public Bank(){
@@ -21,7 +23,7 @@ public class Bank {
 						.setAccBalance(accBalance)
 						.build();
 		AllTheAccounts.put(accNum, newAcc);
-		System.out.println(accNum);
+		Console.debug("Account created, acc num: " + accNum);
 		return accNum;
 	}
 	

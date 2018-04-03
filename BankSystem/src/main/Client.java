@@ -12,6 +12,8 @@ import java.util.HashMap;
 import message.BytePacker;
 import services.Service;
 import socket.NormalSocket;
+import socket.ReceivingLossSocket;
+import socket.SendingLossSocket;
 import socket.Socket;
 
 public class Client {
@@ -30,19 +32,18 @@ public class Client {
 	private int serverPortNumber = 0;
 	private InetAddress InetIpAddress = null;
 	private int message_id = 0;
+	private int timeout = 0;
 	//buffer
     private byte[] buffer = new byte[BUFFER_SIZE];
 	
-	
-	
-	
-
-	public Client(String ipAddress, int portNumber) throws UnknownHostException, SocketException{
+	public Client(String ipAddress, int portNumber, int timeout) throws UnknownHostException, SocketException{
 		this.idToServiceMap = new HashMap<>();
 		this.serverIpAddress = ipAddress;
 		this.InetIpAddress = InetAddress.getByName(ipAddress);
 		this.designatedSocket = new NormalSocket(new DatagramSocket());
 		this.serverPortNumber = portNumber;
+		this.timeout = timeout; //Datagramsocket timeout on receive functions, in ms. 
+		this.designatedSocket.setTimeOut(timeout);
 	}
 	
 	public int getMessage_id() {
@@ -69,17 +70,34 @@ public class Client {
 	}
 	
 	public DatagramPacket receive() throws IOException{
-		clearBuffer();
+		Arrays.fill(buffer,(byte) 0);
 		DatagramPacket p = new DatagramPacket(buffer,buffer.length);
 		this.designatedSocket.receive(p);
-		return p;
-		
+		return p;	
 	}
 	
-	public void clearBuffer(){
-		 Arrays.fill(buffer,(byte) 0);
+	public Socket getDesignatedSocket(){
+		return this.designatedSocket;
 	}
 	
+	public int getTimeout(){
+		return this.timeout;
+	}
+	
+	
+	public void useReceivingLossSocket(double probability){
+		this.designatedSocket = new ReceivingLossSocket(this.designatedSocket,probability);
+	}
+	
+	public void useSendingLossSocket(double probability){
+		this.designatedSocket = new SendingLossSocket(this.designatedSocket, probability);
+	}
+	
+	public void printMenu(){
+		for(Integer serviceId : idToServiceMap.keySet()){
+			Console.println(String.format("%d: %s", serviceId, idToServiceMap.get(serviceId).ServiceName()));
+		}
+	}
 	
 	
 }

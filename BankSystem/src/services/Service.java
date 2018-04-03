@@ -2,12 +2,17 @@ package services;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.SocketTimeoutException;
 
 import main.Client;
 import main.Console;
 import message.BytePacker;
 import message.ByteUnpacker;
 import message.OneByteInt;
+import socket.NormalSocket;
+import socket.Socket;
+import socket.WrapperSocket;
 
 public abstract class Service {
 	
@@ -25,17 +30,28 @@ public abstract class Service {
 						.build()
 						.defineComponents(unpacker);
 	}
-	
+	/**
+	 * 
+	 * @param client
+	 * @param packer request that was just sent out, now waiting for reply from server
+	 * @param message_id id of request sent out
+	 * @return Unpacked message once received from server. message_id in msg from server must match param message_id
+	 * @throws IOException
+	 */
 	public final ByteUnpacker.UnpackedMsg receivalProcedure(Client client, BytePacker packer, int message_id ) throws IOException{
 		while(true){
-			DatagramPacket reply = client.receive();
-			ByteUnpacker.UnpackedMsg unpackedMsg = this.unpacker.parseByteArray(reply.getData());
-			if(checkMsgId(message_id,unpackedMsg)) return unpackedMsg;
-			else{
-				Console.debug("Message Id not the same");
-				//Resend if request not met
+			try{
+				//DatagramSocket tempSocket = ((NormalSocket) ((WrapperSocket)client.getDesignatedSocket()).getSocket()).getSocket();
+				//Console.debug("bufferSize: "+ tempSocket.getReceiveBufferSize());
+				DatagramPacket reply = client.receive();
+				ByteUnpacker.UnpackedMsg unpackedMsg = this.getUnpacker().parseByteArray(reply.getData());
+				if(checkMsgId(message_id,unpackedMsg)) return unpackedMsg;
+			}catch (SocketTimeoutException e){
+				//If socket receive function timeout, catch exception, resend request. Stays here until reply received? okay. 
+				Console.debug("Socket timeout.");
 				client.send(packer);
 			}
+			
 			
 		}
 	}
@@ -62,7 +78,12 @@ public abstract class Service {
 		return false;
 	}
 	
-	public abstract void executeRequest(Console console, Client client) throws IOException;
 	
+	public ByteUnpacker getUnpacker() {
+		return unpacker;
+	}
+	
+	public abstract void executeRequest(Console console, Client client) throws IOException;
+	public abstract String ServiceName(); 
 	
 }

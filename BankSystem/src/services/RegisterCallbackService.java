@@ -1,6 +1,8 @@
 package services;
 
 import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.SocketTimeoutException;
 
 import main.Client;
 import main.Console;
@@ -38,15 +40,38 @@ public class RegisterCallbackService extends Service{
 			 * call receive receive receive until 1 msg that has status 4 which means auto-monitoring expired.
 			 * */
 			while(true){
-				ByteUnpacker.UnpackedMsg callbackMsg = receivalProcedure(client, packer, message_id);
+				client.getDesignatedSocket().setTimeOut(0);
+				ByteUnpacker.UnpackedMsg callbackMsg = callbackUpdatesHandler(client, message_id, super.getUnpacker());
 				String callbackMsgReply = callbackMsg.getString(Service.REPLY);
 				Console.println(callbackMsgReply);
 				if(checkStatus(callbackMsg,4)){
+					client.getDesignatedSocket().setTimeOut(client.getTimeout());
 					break;
 				}
 			}
 		}
+	
 	}
+	public ByteUnpacker.UnpackedMsg callbackUpdatesHandler(Client client, int message_id, ByteUnpacker unpacker) throws IOException{
+		while(true){
+			try{
+				DatagramPacket reply = client.receive();
+				ByteUnpacker.UnpackedMsg unpackedMsg = unpacker.parseByteArray(reply.getData());
+				if(checkMsgId(message_id,unpackedMsg)) return unpackedMsg;
+			}catch (SocketTimeoutException e){
+				//If socket receive function timeout, catch exception, resend request. Stays here until reply received? okay. 
+				Console.debug("Socket timeout exception in callbackUpdates handler");
+				
+			}
+		}
+	
+	}
+	
+	@Override
+	public String ServiceName() {
+		return "Register Callback";
+	}
+	
 	
 	
 
