@@ -7,8 +7,11 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
 import bank.Bank;
+import services.BalanceTransfer;
+import services.BalanceUpdate;
 import services.CallbackHandlerClass;
 import services.CheckBalanceService;
+import services.CloseAccountService;
 import services.CreateAccountService;
 import services.RegisterCallbackService;
 import socket.NormalSocket;
@@ -33,6 +36,9 @@ public class ServerApplication {
 			callbackHandler = new CallbackHandlerClass(socket);
 			//Services to be added to server
 			server.addServiceToServer(0, new CreateAccountService(callbackHandler));
+			server.addServiceToServer(1, new CloseAccountService(callbackHandler));
+			server.addServiceToServer(2, new BalanceUpdate());
+			server.addServiceToServer(3, new BalanceTransfer());
 			server.addServiceToServer(4, new RegisterCallbackService(callbackHandler));
 			server.addServiceToServer(5, new CheckBalanceService(callbackHandler));
 			////////////////
