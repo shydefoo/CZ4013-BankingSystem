@@ -33,10 +33,8 @@ public class Application {
 			}
 			
 		} catch (UnknownHostException | SocketException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

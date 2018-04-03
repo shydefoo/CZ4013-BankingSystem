@@ -14,11 +14,9 @@ import java.util.HashMap;
 public class BytePacker {
 	private ArrayList<String> properties;
 	private HashMap<String, Object> propToValue;
-	
 	public BytePacker(){
 		properties = new ArrayList<>();
 		propToValue = new HashMap<>();
-		
 	}
 	public void setValue(String key, Object value){
 		properties.add(key);
