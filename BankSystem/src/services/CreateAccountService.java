@@ -21,7 +21,7 @@ public class CreateAccountService extends Service {
 	
 	/***
 	 * Account creation: 
-	 * Required details - 1) Name (string), 2) Password (6 digit integer), 3) Currency type (string?), 4) Initial Balance (Double)
+	 * Required details - 1) Name (string), 2) Password (6 digit integer), 3) Currency type (string), 4) Initial Balance (Double)
 	 * @throws IOException 
 	 */
 	@Override
@@ -43,10 +43,9 @@ public class CreateAccountService extends Service {
 		client.send(packer);
 		
 		ByteUnpacker.UnpackedMsg unpackedMsg = receivalProcedure(client, packer, message_id);
-		if(checkStatus(unpackedMsg)){ //Check if reply status is 0. 0 means success. 
-			//String accNum = unpackedMsg.getString(Service.REPLY);
-			//Console.println("Account successfully created.");
-			//Console.println("Account number: " + accNum);	
+		/*Check if reply status is 0. 0 means success. */
+		if(checkStatus(unpackedMsg)){ 
+			
 			String reply = unpackedMsg.getString(Service.REPLY);
 			Console.println(reply);
 		}

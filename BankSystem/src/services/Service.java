@@ -30,8 +30,8 @@ public abstract class Service {
 						.build()
 						.defineComponents(unpacker);
 	}
+	
 	/**
-	 * 
 	 * @param client
 	 * @param packer request that was just sent out, now waiting for reply from server
 	 * @param message_id id of request sent out
@@ -41,18 +41,13 @@ public abstract class Service {
 	public final ByteUnpacker.UnpackedMsg receivalProcedure(Client client, BytePacker packer, int message_id ) throws IOException{
 		while(true){
 			try{
-				//DatagramSocket tempSocket = ((NormalSocket) ((WrapperSocket)client.getDesignatedSocket()).getSocket()).getSocket();
-				//Console.debug("bufferSize: "+ tempSocket.getReceiveBufferSize());
 				DatagramPacket reply = client.receive();
 				ByteUnpacker.UnpackedMsg unpackedMsg = this.getUnpacker().parseByteArray(reply.getData());
 				if(checkMsgId(message_id,unpackedMsg)) return unpackedMsg;
 			}catch (SocketTimeoutException e){
-				//If socket receive function timeout, catch exception, resend request. Stays here until reply received? okay. 
 				Console.debug("Socket timeout.");
 				client.send(packer);
 			}
-			
-			
 		}
 	}
 	public final boolean checkMsgId(Integer message_id, ByteUnpacker.UnpackedMsg unpackedMsg){
