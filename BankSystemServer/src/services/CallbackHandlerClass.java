@@ -13,7 +13,7 @@ import message.BytePacker;
 import message.OneByteInt;
 import socket.Socket;
 
-public class CallbackHandlerClass {
+public class CallbackHandlerClass implements Runnable {
 	private Socket designatedSocket;
 	private static ArrayList<Subscriber> allTheSubscribers;
 	
@@ -102,6 +102,23 @@ public class CallbackHandlerClass {
 		
 		
 	}
+	@Override
+	public void run() {
+		while(true){
+			try {
+				//Check validity every 20s on separate thread.
+				checkValidity();
+				Thread.sleep(20);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+	}
 	
 	public static class Subscriber{
 		private InetAddress address;
@@ -126,6 +143,8 @@ public class CallbackHandlerClass {
 			Console.debug("Address: " + address.toString() + ", portNumber: " + portNumber + ", messageId: " + messageId + ", expireTime: " + expireTime.getTime());
 		}
 	}
+
+	
 
 	
 

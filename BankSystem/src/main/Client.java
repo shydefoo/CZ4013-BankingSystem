@@ -8,6 +8,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.concurrent.ThreadLocalRandom;
 
 import message.BytePacker;
 import services.Service;
@@ -28,10 +29,10 @@ public class Client {
 	
 	private Socket designatedSocket = null;
 	private HashMap<Integer, Service> idToServiceMap; /*Hashmap containing the serviceId and corresponding service*/
-	private String serverIpAddress = null;
-	private int serverPortNumber = 0;
+	private String serverIpAddress;
+	private int serverPortNumber;
 	private InetAddress InetIpAddress = null;
-	private int message_id = 0;
+	private int message_id;
 	private int timeout = 0;
 	//buffer
     private byte[] buffer = new byte[BUFFER_SIZE];
@@ -44,6 +45,7 @@ public class Client {
 		this.serverPortNumber = portNumber;
 		this.timeout = timeout; //Datagramsocket timeout on receive functions, in ms. 
 		this.designatedSocket.setTimeOut(timeout);
+		this.message_id = 0;
 	}
 	
 	public int getMessage_id() {

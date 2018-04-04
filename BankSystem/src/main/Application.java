@@ -32,7 +32,7 @@ public class Application {
 			client.addService(4, new RegisterCallbackService());
 			client.addService(5, new CheckBalanceService());
 			
-			Console.debug_info = false;
+			//Console.debug_info = false;
 			/*Specify what type of socket to use*/
 			//double probability = 0.5;
 			//client.useReceivingLossSocket(probability);

@@ -57,7 +57,7 @@ public class Server {
 					System.out.println("Service Requested: " + service.ServiceName());
 					BytePacker replyToRequest = service.handleService(clientAddress,clientPortNumber, data, this.designatedSocket);
 					this.designatedSocket.send(replyToRequest, clientAddress, clientPortNumber);		
-					//To do call back service, method has to come here as well. What kind of reply depends on service requested by client.
+					
 				}	
 			}else{
 				Console.debug("Nothing received");
