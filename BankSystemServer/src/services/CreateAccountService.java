@@ -9,6 +9,11 @@ import message.ByteUnpacker;
 import message.OneByteInt;
 import socket.Socket;
 
+/**
+ * This class handles requests to check the remaining close an account. 
+ * @author Shide
+ *
+ */
 public class CreateAccountService extends Service {
 	protected final static String NAME = "Name";
 	protected final static String PIN = "Pin";

@@ -9,6 +9,11 @@ import java.net.SocketException;
 import main.Console;
 import message.BytePacker;
 
+/**
+ * The NormalSocket makes system calls to the DatagramSocket object.
+ * @author Shide
+ *
+ */
 public class NormalSocket implements Socket {
 	
 	private DatagramSocket socket;

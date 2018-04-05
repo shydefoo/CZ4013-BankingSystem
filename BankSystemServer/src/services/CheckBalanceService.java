@@ -8,11 +8,21 @@ import message.ByteUnpacker;
 import message.OneByteInt;
 import socket.Socket;
 
+/**
+ * This class handles requests to check the remaining balance for an account. 
+ * @author Shide
+ *
+ */
 public class CheckBalanceService extends Service {
 	protected final static String ACC_NUMBER = "AccountNumber";
 	protected final static String PIN = "Pin";
 	private CallbackHandlerClass callbackHandler;
-
+	
+	/**
+	 * Class constructor for CheckBalanceService
+	 * @param callbackHandler Callbackhandler instance to handle callback service for clients that subscribe to
+	 * this service
+	 */
 	public CheckBalanceService(CallbackHandlerClass callbackHandler) {
 		super(new ByteUnpacker.Builder()
 				.setType(ACC_NUMBER,ByteUnpacker.TYPE.INTEGER)
