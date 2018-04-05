@@ -11,6 +11,7 @@ import java.util.HashMap;
 import message.BytePacker;
 import services.CallbackHandlerClass;
 import services.Service;
+import socket.CorruptedSocket;
 import socket.NormalSocket;
 import socket.ReceivingLossSocket;
 import socket.SendingLossSocket;
@@ -87,5 +88,8 @@ public class Server {
 	}
 	public void useReceivingLossSocket(double probability){
 		this.designatedSocket = new ReceivingLossSocket(this.designatedSocket, probability);
+	}
+	public void useCorruptedSocket(double probability){
+		this.designatedSocket = new CorruptedSocket(this.designatedSocket, probability);
 	}
 }

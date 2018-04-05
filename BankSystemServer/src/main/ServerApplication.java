@@ -45,11 +45,15 @@ public class ServerApplication {
 				server = new AtMostOnceServer(socket); //at-most-once server
 			}
 			/*Specify what type of socket to use*/
-			int socketType = console.askForInteger(1, 2, "Select Socket Type: \n1)Normal Socket\n2SendingLossSocket");
+			int socketType = console.askForInteger(1, 3, "Select Socket Type: \n1)Normal Socket\n2)SendingLossSocket \n3)CorruptedSocket");
 			 if(socketType==2){
 				double probability = 1 - console.askForDouble(0.0, 1.0, "Probability of packetloss:");
 				server.useSendingLossSocket(probability);
-			 }			
+			 }
+			 else if(socketType==3){
+				 double probability = 1 - console.askForDouble(0.0, 1.0, "Probability of packetloss:");
+				 server.useCorruptedSocket(probability);
+			 }
 			//Console.debug_info = false;		
 			
 			/*End of code to set server configurations*/	
