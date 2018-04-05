@@ -8,11 +8,11 @@ import java.util.Random;
 import main.Console;
 import message.BytePacker;
 
-public class SendingCorruptedSocket extends WrapperSocket{
+public class CorruptedSocket extends WrapperSocket{
 	
 	private final double probability;
 	private final Random random;
-	public SendingCorruptedSocket(Socket socket, double probability) {
+	public CorruptedSocket(Socket socket, double probability) {
 		super(socket);
 		this.random = new Random();
 		this.probability = probability;
@@ -32,5 +32,10 @@ public class SendingCorruptedSocket extends WrapperSocket{
 			socket.send(p);
 		}
 	}
+	@Override
+    public void receive(DatagramPacket p) throws IOException {
+        super.receive(p);
+        if (random.nextDouble()<probability) corruptData(p.getData());
+    }
 	
 }

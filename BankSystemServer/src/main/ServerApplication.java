@@ -24,7 +24,7 @@ public class ServerApplication {
 	private static CallbackHandlerClass callbackHandler;
 	private static InetAddress address;
 	private static Socket socket;
-	private static final int PORT_NUMBER = 8000;
+	private static int portNumber;
 	public static void main(String[] args){
 		Console console = new Console(new Scanner(System.in));
 		try {
@@ -34,22 +34,8 @@ public class ServerApplication {
 			/*Start of code to set server configurations*/
 			String addressInput = console.askForString("Input IP address hosting server on:");
 			address = InetAddress.getByName(addressInput);
-			
-			
-			/*Specify what type of socket to use*/
-			int socketType = console.askForInteger(1, 3, "Select Socket Type: \n1)Normal Socket\n2)ReceivingLossSocket\n3)SendingLossSocket");
-			 if(socketType==1){
-				 socket = new NormalSocket(new DatagramSocket(PORT_NUMBER,address));
-			 }else {
-				 double probability = console.askForDouble(0.0, 1.0, "Probability of packetloss:");
-				 if(socketType == 2){
-					 server.useReceivingLossSocket(probability);
-				 } 
-				 else if(socketType==3){
-					 server.useSendingLossSocket(probability);
-				 }
-			 }			
-			//Console.debug_info = false;		
+			portNumber = console.askForInteger("Input port number for server to listen at:");
+			socket = new NormalSocket(new DatagramSocket(portNumber,address));
 			/*Specify type of server*/
 			int serverChoice = console.askForInteger(1, 2, "Select Server type: \n1)At-Least-Once\n2)At-Most-Once");
 			if(serverChoice==1){
@@ -58,6 +44,14 @@ public class ServerApplication {
 			else if(serverChoice==2){
 				server = new AtMostOnceServer(socket); //at-most-once server
 			}
+			/*Specify what type of socket to use*/
+			int socketType = console.askForInteger(1, 2, "Select Socket Type: \n1)Normal Socket\n2SendingLossSocket");
+			 if(socketType==2){
+				double probability = 1 - console.askForDouble(0.0, 1.0, "Probability of packetloss:");
+				server.useSendingLossSocket(probability);
+			 }			
+			//Console.debug_info = false;		
+			
 			/*End of code to set server configurations*/	
 			
 			callbackHandler = new CallbackHandlerClass(socket);

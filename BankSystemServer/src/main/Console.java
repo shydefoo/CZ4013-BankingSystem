@@ -75,7 +75,7 @@ public class Console {
 		while(true){
 			try{
 				choice = Integer.parseInt(scanner.nextLine());
-				if(choice <= min && choice <=max){
+				if(choice >= min && choice <=max){
 					return choice;
 				}
 				else{
@@ -91,7 +91,7 @@ public class Console {
 		while(true){
 			try{
 				choice = Double.parseDouble(scanner.nextLine());
-				if(choice <= min && choice <=max){
+				if(choice >= min && choice <=max){
 					return choice;
 				}
 				else{

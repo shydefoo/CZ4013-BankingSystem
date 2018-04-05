@@ -12,6 +12,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import message.BytePacker;
 import services.Service;
+import socket.CorruptedSocket;
 import socket.NormalSocket;
 import socket.ReceivingLossSocket;
 import socket.SendingLossSocket;
@@ -93,6 +94,10 @@ public class Client {
 	
 	public void useSendingLossSocket(double probability){
 		this.designatedSocket = new SendingLossSocket(this.designatedSocket, probability);
+	}
+	
+	public void useCorruptedSocket(double probability){
+		this.designatedSocket = new CorruptedSocket(this.designatedSocket, probability);
 	}
 	
 	public void printMenu(){
