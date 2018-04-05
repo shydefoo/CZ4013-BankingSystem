@@ -16,10 +16,11 @@ import services.BalanceUpdate;
 
 public class Application {
 	public static void main(String[] args){
-		String serverIpAddress = "127.0.0.1"; //need to change if using a different computer on the network
-		int serverPortNumber = 8000; //designated port number
-		int timeout = 5;
+		
 		Console console = new Console(new Scanner(System.in));
+		String serverIpAddress = console.askForString("Input server ip address:"); //need to change if using a different computer on the network
+		int serverPortNumber = console.askForInteger("Input server port number"); //designated port number
+		int timeout = console.askForInteger("Input socket timeout");
 				
 		try {
 			Client client = new Client(serverIpAddress, serverPortNumber, timeout*1000);
@@ -32,11 +33,22 @@ public class Application {
 			client.addService(4, new RegisterCallbackService());
 			client.addService(5, new CheckBalanceService());
 			
-			Console.debug_info = false;
+			//Console.debug_info = false;
 			/*Specify what type of socket to use*/
-			//double probability = 0.5;
-			//client.useReceivingLossSocket(probability);
-			//client.useSendingLossSocket(probability);
+			int socketType = console.askForInteger(1, 4, "Select Socket Type: \n1)Normal Socket\n2)SendingLossSocket\n3)ReceivingLossSocket\n4)CorruptedSocket");
+			if(socketType!=1){
+				 double probability = 1.0 - console.askForDouble(0.0, 1.0, "Probability of packetloss:");
+				 //System.out.println("socketType:" + socketType);
+				 if(socketType == 2){
+					 client.useSendingLossSocket(probability);
+				 } 
+				 else if(socketType==3){
+					 client.useReceivingLossSocket(probability);
+				 }else if(socketType == 4){
+					 client.useCorruptedSocket(probability);
+				 }
+			 }	
+
 			
 			while(true){
 				client.printMenu();

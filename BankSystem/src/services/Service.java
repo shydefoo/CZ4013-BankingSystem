@@ -43,7 +43,9 @@ public abstract class Service {
 			try{
 				DatagramPacket reply = client.receive();
 				ByteUnpacker.UnpackedMsg unpackedMsg = this.getUnpacker().parseByteArray(reply.getData());
-				if(checkMsgId(message_id,unpackedMsg)) return unpackedMsg;
+				if(checkMsgId(message_id,unpackedMsg)){
+					return unpackedMsg;
+				}		
 			}catch (SocketTimeoutException e){
 				Console.debug("Socket timeout.");
 				client.send(packer);
@@ -52,8 +54,8 @@ public abstract class Service {
 	}
 	public final boolean checkMsgId(Integer message_id, ByteUnpacker.UnpackedMsg unpackedMsg){
 		Integer return_message_id = unpackedMsg.getInteger(MESSAGE_ID);
-		Console.debug("return_message_id: " + Integer.toString(return_message_id));
-		Console.debug("message_id: " + Integer.toString(message_id));
+		Console.debug("return_message_id: " + return_message_id);
+		Console.debug("message_id: " + message_id);
 		if(return_message_id != null){
 			return message_id == return_message_id;
 		}

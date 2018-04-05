@@ -68,4 +68,36 @@ public class Console {
 		System.out.println(question);
 		return scanner.nextLine();
 	}
+	public int askForInteger(int min, int max, String question){
+		System.out.println(question);
+		int choice = min;
+		while(true){
+			try{
+				choice = Integer.parseInt(scanner.nextLine());
+				if(choice >= min && choice <=max){
+					return choice;
+				}
+				else{
+					System.out.println("Invalid Choice");
+					System.out.println(question);
+				}
+			}catch(NumberFormatException ignored){}
+		}
+	}
+	public double askForDouble(double min, double max, String question){
+		System.out.println(question);
+		double choice = min;
+		while(true){
+			try{
+				choice = Double.parseDouble(scanner.nextLine());
+				if(choice >= min && choice <=max){
+					return choice;
+				}
+				else{
+					System.out.println("Invalid Choice");
+					System.out.println(question);
+				}
+			}catch(NumberFormatException ignored){}
+		}
+	}
 }

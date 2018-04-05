@@ -31,7 +31,11 @@ public class CreateAccountService extends Service {
 		int pin = console.askForInteger("Input your 6 digit pin-number:");
 		String currency = console.askForString("Specify currency type:");
 		double init_balance = console.askForDouble("Enter initial balance:");
-		int message_id = client.getMessage_id();	/*This should only be called once for each executeRequest as the message_id will be incremented each time  this method is called*/
+
+		/*returns current messageId value before incrementing it */
+		int message_id = client.getMessage_id();	
+		
+		/*Carry out marshalling, store values for each field in request*/
 		BytePacker packer = new BytePacker.Builder()
 								.setProperty(Service.SERVICE_ID, new OneByteInt(Client.CREATE_ACCOUNT))
 								.setProperty(Service.MESSAGE_ID, message_id)
@@ -43,6 +47,7 @@ public class CreateAccountService extends Service {
 		client.send(packer);
 		
 		ByteUnpacker.UnpackedMsg unpackedMsg = receivalProcedure(client, packer, message_id);
+		
 		/*Check if reply status is 0. 0 means success. */
 		if(checkStatus(unpackedMsg)){ 
 			

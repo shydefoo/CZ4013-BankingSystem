@@ -1,5 +1,9 @@
 package message;
-
+/**
+ * Class that holds integer that takes up 1 byte. 
+ * @author Shide
+ *
+ */
 public class OneByteInt {
 	private int value;
 	

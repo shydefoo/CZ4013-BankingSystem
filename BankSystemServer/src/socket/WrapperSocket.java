@@ -38,5 +38,9 @@ public class WrapperSocket implements Socket {
 		this.socket.setTimeOut(timeout);
 		
 	}
+	
+	public Socket getSocket(){
+		return socket;
+	}
 
 }

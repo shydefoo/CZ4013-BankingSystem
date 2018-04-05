@@ -2,13 +2,23 @@ package main;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import message.BytePacker;
 
+
+/**
+ * History of clients to perform at-most-once semantics. 
+ *
+ */
 public class History {
 	private ArrayList<Client> clientList;
+	public static final int HISTORY_RECORD_SIZE = 10;
 	
+	/**
+	 * Class constructor of History
+	 */
 	public History(){
 		clientList = new ArrayList<>();
 	}
@@ -32,30 +42,53 @@ public class History {
 		return newClient;
 	}
 	
+
+	
+	
 	/**
-	 * Searches if hashmap in client object contains a request with the same messageId. (if same messageId means duplicate request)
-	 * @param client
-	 * @param messageId
-	 * @return
+	 * Represents each client that has sent the server a request before. 
 	 */
-	
-	
-	
 	public class Client{
 		private InetAddress address;
 		private int portNumber;
 		private HashMap<Integer, BytePacker> messageIdToReplyMap;
+		private int[] historyRecord;
+		private int count;
 		public Client(InetAddress address, int portNumber){
 			this.address = address;
 			this.portNumber = portNumber;
 			this.messageIdToReplyMap = new HashMap<>();
+			historyRecord = new int[HISTORY_RECORD_SIZE]; //keep 10 messages in history
+			count = 0;
+			Arrays.fill(historyRecord, -1);
+			
 		}
+		
+		/**
+		 * Searches if messageID exist in client hashmap
+		 * @param messageId - messageId of incoming request
+		 * @return reply to request if messageID does exists in the hashmap, null otherwise
+		 */
 		public BytePacker searchForDuplicateRequest(int messageId){
 			BytePacker reply = this.messageIdToReplyMap.get(messageId);
+			if(reply!=null){
+				Console.debug("Request already serviced. Resending reply");
+			}
 			return reply;
 		}
+		
+		/**
+		 * Adds a messageId and reply to hashmap after request is serviced.
+		 * @param messageId - messageId of incoming request
+		 * @param replyToServicedReq - reply sent to client for this request
+		 */
 		public void addServicedReqToMap(int messageId, BytePacker replyToServicedReq) {
+			if(historyRecord[count] !=-1){
+				messageIdToReplyMap.remove(historyRecord[count]);
+			}
 			this.messageIdToReplyMap.put(messageId, replyToServicedReq);
+			historyRecord[count] = messageId; 
+			count = (count + 1) % HISTORY_RECORD_SIZE;
 			
 		}
 	}

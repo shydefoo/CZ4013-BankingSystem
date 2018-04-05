@@ -13,16 +13,33 @@ import message.BytePacker;
 import message.OneByteInt;
 import socket.Socket;
 
-public class CallbackHandlerClass {
+/**
+ * This class handles the callback service. It keeps a list of subscribers and sends a message to these subscribers
+ * whenever the broadcast method is called, using the server socket
+ * @author Shide
+ *
+ */
+public class CallbackHandlerClass implements Runnable {
 	private Socket designatedSocket;
 	private static ArrayList<Subscriber> allTheSubscribers;
 	
+	/**
+	 * Class constructor for CallbackHandlerClass
+	 * @param designatedSocket - socket that server is using to send and receive messages
+	 */
 	public CallbackHandlerClass(Socket designatedSocket){
 		this.designatedSocket = designatedSocket;
 		allTheSubscribers = new ArrayList<>();
 		
 	}
 	
+	/**
+	 * Register subscriber to this callback service
+	 * @param address - ip address of subscriber
+	 * @param portNumber - port number of subscriber
+	 * @param messageId - messageID of update message
+	 * @param timeout - duration that subscriber wishes to receive updates for
+	 */
 	public void registerSubscriber(InetAddress address, int portNumber, int messageId, int timeout){
 		Subscriber subscriber = new Subscriber(address, portNumber, messageId, timeout);
 		
@@ -38,6 +55,14 @@ public class CallbackHandlerClass {
 		
 	}
 	
+	/**
+	 * Checks if this subscriber already exists in list of subscribers. 
+	 * @param address - ip address of subscriber
+	 * @param portNumber - port number of subscriber
+	 * @param messageId - messageID of update message
+	 * @param timeout - duration that subscriber wishes to receive updates for
+	 * @return
+	 */
 	public boolean checkExisting(InetAddress address, int portNumber, int messageId, int timeout){
 		//Console.debug("Check Existing");
 		boolean DoesNotExists = true; //set to true, means no such subscriber
@@ -51,7 +76,11 @@ public class CallbackHandlerClass {
 		return DoesNotExists;
 	}
 	
-	
+	/**
+	 * Monitors which subscribers have expired. A termination message is sent to a subscriber informing them that
+	 * they are removed from this callback service, before the subscriber is removed from the listOfSubscribers.
+	 * @throws IOException
+	 */
 	public void checkValidity() throws IOException{
 		Date now = new GregorianCalendar().getTime();
 		ArrayList<Subscriber> temp = new ArrayList<>();
@@ -72,6 +101,12 @@ public class CallbackHandlerClass {
 		}
 	}
 	
+	/**
+	 * Send message to a subscriber
+	 * @param s - recipient subscriber 
+	 * @param status - message status
+	 * @throws IOException
+	 */
 	public void sendTerminationMessage(Subscriber s,OneByteInt status) throws IOException{
 		Console.debug("Sending termination message");
 		String reply = "Auto monitoring expired.";
@@ -84,15 +119,22 @@ public class CallbackHandlerClass {
 		designatedSocket.send(replyMessage, s.address, s.portNumber);
 	}
 	
+	/**
+	 * Checks which subscribers have not expired, then send update message to all subscribers
+	 * @param msg - BytePacker message 
+	 */
 	public void broadcast(BytePacker msg){
 		try {
 			checkValidity();
 			if(((OneByteInt)msg.getPropToValue().get(Service.getStatus())).getValue()==0){ //Only if reply status is 0, then broadcast out. 
-				Console.debug("Sending packets to subscribers:");
-				for (Subscriber s: allTheSubscribers){
-					msg.getPropToValue().put(Service.getMessageId(), s.messageId); //replace msgId of reply to whoever that made the action of with msgId of subscriber.
-					designatedSocket.send(msg, s.address, s.portNumber);
+				if(!allTheSubscribers.isEmpty()){
+					Console.debug("Sending packets to subscribers:");
+					for (Subscriber s: allTheSubscribers){
+						msg.getPropToValue().put(Service.getMessageId(), s.messageId); //replace msgId of reply to whoever that made the action of with msgId of subscriber.
+						designatedSocket.send(msg, s.address, s.portNumber);
+					}
 				}
+				
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -102,14 +144,45 @@ public class CallbackHandlerClass {
 		
 		
 	}
+	/**
+	 * checkValidity() is carried out on a separate thread. This method is called every 20s
+	 */
+	@Override
+	public void run() {
+		while(true){
+			try {
+				//Check validity every 10s on separate thread.
+				checkValidity();
+				Thread.sleep(10000);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+	}
 	
+	/**
+	 * The subscriber class stores the information of clients that subscribe to the callback service. 
+	 * @author Shide
+	 *
+	 */
 	public static class Subscriber{
 		private InetAddress address;
 		private int portNumber;
 		private Calendar expireTime;
-		private int messageId; //Store messageId, such that each msg(the update) sent to subscriber has same msgId of request? Hmmmm okay.
-		//think of a way to manage monitor interval. timeout should be associated with Subscriber object. 
-		//private 
+		private int messageId; 
+		
+		/**
+		 * Class constructor for Subscriber object
+		 * @param address - ip address
+		 * @param portNumber - port number
+		 * @param messageId - message id of incoming request that registers for callback
+		 * @param timeLimit - monitor interval
+		 */
 		public Subscriber(InetAddress address, int portNumber, int messageId, int timeLimit){
 			this.address = address;
 			this.portNumber = portNumber;
@@ -126,6 +199,8 @@ public class CallbackHandlerClass {
 			Console.debug("Address: " + address.toString() + ", portNumber: " + portNumber + ", messageId: " + messageId + ", expireTime: " + expireTime.getTime());
 		}
 	}
+
+	
 
 	
 

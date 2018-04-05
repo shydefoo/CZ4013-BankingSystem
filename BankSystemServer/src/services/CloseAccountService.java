@@ -39,7 +39,6 @@ public class CloseAccountService extends Service {
 		int ret = Bank.closeAccount(accHolderName,accNum ,accPin);
 		OneByteInt status = new OneByteInt(0); 
 		if (ret == 1){
-			Console.debug("HERE");
 			reply = String.format("---------------\nAccount %d successfully deleted\n--------------- ", accNum);
 			BytePacker replyMessageSubscribers = super.generateReply(status, messageId, reply);
 			callbackHandler.broadcast(replyMessageSubscribers);
