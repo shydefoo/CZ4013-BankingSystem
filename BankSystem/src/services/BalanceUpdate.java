@@ -13,7 +13,12 @@ public class BalanceUpdate extends Service {
 	public BalanceUpdate() {
 		super(null);
 	}
-	
+
+	/***
+	 * Balance Update (Withdraw/Deposit): 
+	 * Required details - 1) Name (string), 2) Account Number (5 digit integer), 3) Password (6 digit integer), 4) choice (0 for withdraw, 1 for deposit), 5) amount (double)
+	 * @throws IOException 
+	 */
 	public void executeRequest(Console console, Client client) throws IOException{
 		Console.println("---------------------Balance Update---------------------------------");
 		String name = console.askForString("Enter your name:");

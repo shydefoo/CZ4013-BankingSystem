@@ -10,7 +10,7 @@ import message.OneByteInt;
 import socket.Socket;
 
 /**
- * This class handles Balance Trasnfer requests
+ * This class handles Balance Transfer requests
  * @author Shide
  *
  */

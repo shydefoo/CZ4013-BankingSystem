@@ -18,6 +18,11 @@ public class CheckBalanceService extends Service {
 		// TODO Auto-generated constructor stub
 	}
 
+	/***
+	 * Check Balance (idempotent operation): 
+	 * Required details - 1) Account Number (5 digit integer), 2) Pin Number (6 digit integer)
+	 * @throws IOException 
+	 */
 	@Override
 	public void executeRequest(Console console, Client client) throws IOException {
 		// TODO Auto-generated method stub

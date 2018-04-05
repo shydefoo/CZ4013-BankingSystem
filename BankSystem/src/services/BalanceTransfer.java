@@ -7,13 +7,24 @@ import main.Console;
 import message.BytePacker;
 import message.ByteUnpacker;
 import message.OneByteInt;
-
+/**
+ * This class creates Balance Transfer requests
+ * @author Shide
+ *
+ */
 public class BalanceTransfer extends Service {
-		
+	/**
+	 * Class constructor for BalanceTransfer
+	 * 
+	 */
 	public BalanceTransfer() {
 		super(null);
 	}
-	
+	/***
+	 * Balance Transfer (non-idempotent operation): 
+	 * Required details - 1) Name (string), 2) Account Number (5 digit integer), 3) Password (6 digit integer), 4) Account Number of Recipient (5 digit integer), 5) amount (double)
+	 * @throws IOException 
+	 */
 	public void executeRequest(Console console, Client client) throws IOException{
 		Console.println("---------------------Balance Transfer---------------------------------");
 		String name = console.askForString("Enter your name:");

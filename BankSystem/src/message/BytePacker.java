@@ -14,10 +14,18 @@ import java.util.HashMap;
 public class BytePacker {
 	private ArrayList<String> properties;
 	private HashMap<String, Object> propToValue;
+	/**
+	 * Class constructor of BytePacker
+	 */
 	public BytePacker(){
 		properties = new ArrayList<>();
 		propToValue = new HashMap<>();
 	}
+	/**
+	 * Add message field to list of fields, and put message field and value in hashmap
+	 * @param key - field in message
+	 * @param value - content of field
+	 */
 	public void setValue(String key, Object value){
 		properties.add(key);
 		propToValue.put(key,value);
@@ -27,6 +35,10 @@ public class BytePacker {
 		return propToValue.get(key);
 	}
 	
+	/**
+	 * Converts objects in propToValues into bytes
+	 * @return byte array
+	 */
 	public byte[] getByteArray(){
 		/*
         Calculate the size required for the byte array
@@ -87,6 +99,15 @@ public class BytePacker {
 		return buffer;
 	}
 	
+	/**
+	 * Converts an integer into a bytes array
+     * Integer has a size of 4 bytes, hence 4 slots of buffer
+     * are needed to store it.
+	 * @param i - Integer to be converted
+	 * @param buffer - buffer 
+	 * @param index - Current buffer index number
+	 * @return Updated current index number
+	 */
 	private int intToByte(int i, byte[] buffer, int index){
 		/*buffer[index++] = (byte)((i>>24) & 0xFF);
 		buffer[index++] = (byte)((i>>16) & 0xFF);
@@ -101,12 +122,33 @@ public class BytePacker {
 		
 		return index;
 	}
+	
+	/**
+	 * Converts a string into a byte array
+     * Since string are made up of characters, there is an assumptions that
+     * All characters are only ASCii characters, which can be fully represented by 1 byte
+     * hence 1 slot of buffer can store 1 character from the string 
+	 * @param s - String that will be converted
+	 * @param buffer - buffer
+	 * @param index - current index 
+	 * @return Updated current index number
+	 */
 	private int stringToByte(String s, byte[] buffer, int index){
 		for(byte b: s.getBytes()){
 			buffer[index++] = b;
 		}
 		return index;
 	}
+	
+	/**
+	 * Convert a double to a byte array.
+	 * Double has a size of 8 bytes, hence 8 slots of buffer
+     * are needed to store it.
+	 * @param d - double to be converted
+	 * @param buffer - buffer
+	 * @param index - current index
+	 * @return updated current index
+	 */
 	private int doubleToByte(Double d, byte[] buffer, int index){
 		byte[] temp = new byte[8];
 		ByteBuffer.wrap(temp).putDouble(d);
