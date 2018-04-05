@@ -9,6 +9,11 @@ import message.ByteUnpacker;
 import message.OneByteInt;
 import socket.Socket;
 
+/**
+ * This class handles Balance Trasnfer requests
+ * @author Shide
+ *
+ */
 public class BalanceTransfer extends Service {
 	protected final static String NAME = "Name";
 	protected final static String ACCNUM = "accNum";
@@ -16,6 +21,12 @@ public class BalanceTransfer extends Service {
 	protected final static String RECEIVER = "receiver";
 	protected final static String AMOUNT = "amount";
 	private CallbackHandlerClass callbackHandler;
+	
+	/**
+	 * Class constructor for BalanceTransfer
+	 * @param callbackHandler Callbackhandler instance to handle callback service for clients that subscribe to
+	 * this service
+	 */
 	public BalanceTransfer(CallbackHandlerClass callbackHandler){
 		super(new ByteUnpacker.Builder()
 						.setType(NAME, ByteUnpacker.TYPE.STRING)
@@ -27,6 +38,7 @@ public class BalanceTransfer extends Service {
 		this.callbackHandler = callbackHandler;
 	}	
 	
+
 	@Override
 	public BytePacker handleService(InetAddress clientAddress, int clientPortNumber, byte[] dataFromClient, Socket socket) {
 		String reply = "";

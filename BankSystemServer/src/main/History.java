@@ -7,10 +7,18 @@ import java.util.HashMap;
 
 import message.BytePacker;
 
+
+/**
+ * History of clients to perform at-most-once semantics. 
+ *
+ */
 public class History {
 	private ArrayList<Client> clientList;
 	public static final int HISTORY_RECORD_SIZE = 10;
 	
+	/**
+	 * Class constructor of History
+	 */
 	public History(){
 		clientList = new ArrayList<>();
 	}
@@ -55,6 +63,12 @@ public class History {
 			Arrays.fill(historyRecord, -1);
 			
 		}
+		
+		/**
+		 * Searches if messageID exist in client hashmap
+		 * @param messageId - messageId of incoming request
+		 * @return reply to request if messageID does exists in the hashmap, null otherwise
+		 */
 		public BytePacker searchForDuplicateRequest(int messageId){
 			BytePacker reply = this.messageIdToReplyMap.get(messageId);
 			if(reply!=null){
@@ -62,6 +76,12 @@ public class History {
 			}
 			return reply;
 		}
+		
+		/**
+		 * Adds a messageId and reply to hashmap after request is serviced.
+		 * @param messageId - messageId of incoming request
+		 * @param replyToServicedReq - reply sent to client for this request
+		 */
 		public void addServicedReqToMap(int messageId, BytePacker replyToServicedReq) {
 			if(historyRecord[count] !=-1){
 				messageIdToReplyMap.remove(historyRecord[count]);

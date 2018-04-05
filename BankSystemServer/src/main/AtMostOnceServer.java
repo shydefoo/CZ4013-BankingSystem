@@ -11,17 +11,29 @@ import message.BytePacker;
 import message.ByteUnpacker;
 import services.Service;
 import socket.Socket;
-
+/**
+ * Server with at-most-once semantics applied
+ * 
+ *
+ */
 public class AtMostOnceServer extends Server {
 	
 	private History history;
-
+	
+	/**
+	 * Class constructor of AtMostOnceServer
+	 * @param socket Socket object that server uses to send and receive messages
+	 * @throws SocketException
+	 */
 	public AtMostOnceServer(Socket socket) throws SocketException {
 		super(socket);
 		history = new History();
 		// TODO Auto-generated constructor stub
 	}
 	
+	/**
+	 * Method for server to start listening to incoming request
+	 */
 	public void start(){
 		while(true){
 			try{

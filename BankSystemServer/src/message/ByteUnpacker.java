@@ -4,16 +4,30 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-
+/**
+ * The ByteUnpacker class handles the unmarshalling of incoming messages
+ * The message will be converted into from a byte array to the type of object in the message
+ * @author Shide
+ *
+ */
 public class ByteUnpacker {
 	private ArrayList<String> properties;
 	private HashMap <String, TYPE> propToValue;
 	
+	/**
+	 * Class constructor of ByteUnpacker
+	 */
 	public ByteUnpacker(){
 		properties = new ArrayList<>();
 		propToValue = new HashMap<>();
 	}
 	
+	/**
+	 * This method will include all the values
+     * and properties
+	 * @param unpacker ByteUnpacker object
+	 * @return ByteUnpacker object itself
+	 */
 	public ByteUnpacker defineComponents(ByteUnpacker unpacker){
 		if(unpacker!=null){
 			properties.addAll(unpacker.properties);
@@ -22,11 +36,11 @@ public class ByteUnpacker {
 		return this;
 	}
 	/***
-	 *Identify data structure type for each property using hashmap built from defineComponents()
-	 *Scan byte array using hashmap to build a new hashmap containing key and actual values
+	 * Identify data structure type for each property using hashmap built from defineComponents()
+	 * Scan byte array using hashmap to build a new hashmap containing key and actual values
 	 * 
-	 * @param data
-	 * @return
+	 * @param data byte array from DatagramPacket
+	 * @return UnpackedMsg object
 	 */
 	public UnpackedMsg parseByteArray(byte[] data){
 		int offset = 0;
@@ -65,6 +79,13 @@ public class ByteUnpacker {
 		}
 	}
 	
+	/**
+	 * Converts bytes from byte array into a string
+	 * @param data - byte array from the DatagramPacket
+	 * @param offset - offset from the first index position of the byte array
+	 * @param length - length of the string to be parsed
+	 * @return
+	 */
 	private String parseString(byte[] data, int offset, int length) {
 		try{
 			StringBuilder sb = new StringBuilder();
@@ -77,7 +98,13 @@ public class ByteUnpacker {
 		}
 		
 	}
-
+	
+	/**
+	 * Converts bytes from byte arry into a data structure of type double
+	 * @param data - byte array from the DatagramPacket
+	 * @param offset - offset from the first index position of the byte array
+	 * @return double data type
+	 */
 	private Double parseDouble(byte[] data, int offset) {
 		int doubleSize = 8;
 		byte[] temp = new byte[doubleSize];
@@ -87,7 +114,13 @@ public class ByteUnpacker {
 		double value = ByteBuffer.wrap(temp).getDouble();
 		return value;
 	}
-
+	
+	/**
+	 * Converts bytes from byte arry into a data structure of type integer
+	 * @param data - byte array from the DatagramPacket
+	 * @param offset - offset from the first index position of the byte array
+	 * @return integer data type
+	 */
 	private Integer parseInt(byte[] data, int offset) {
 		int intSize = 4;
 		byte[] temp = new byte[intSize];
@@ -100,10 +133,21 @@ public class ByteUnpacker {
 	}
 
 	
-	
+	/**
+	 * UnpackedMsg class is the handler to retrieve the contents on the message 
+	 * by looking up a hashmap.
+	 * Keys of the hashmap represent the fields of the message.
+	 * Values at the keys represent the contents for that field
+	 * @author Shide
+	 *
+	 */
 	public static class UnpackedMsg{
 		private HashMap<String, Object> map;
 		
+		/**
+		 * Class constructor of UnpackedMsg
+		 * @param map
+		 */
 		public UnpackedMsg(HashMap<String,Object> map){
 			this.map = map;
 		}
@@ -147,7 +191,10 @@ public class ByteUnpacker {
 	public enum TYPE {
         INTEGER, DOUBLE, STRING, BYTE_ARRAY, ONE_BYTE_INT
     }
-	
+	/**
+	 * Builder class for the ByteUnpacker class
+	 *
+	 */
 	public static class Builder{
 		private ByteUnpacker unpacker;
 		public Builder(){

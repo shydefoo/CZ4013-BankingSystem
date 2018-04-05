@@ -17,6 +17,11 @@ import socket.ReceivingLossSocket;
 import socket.SendingLossSocket;
 import socket.Socket;
 
+/**
+ * Server that performs at-least-once semantics
+ * @author Shide
+ *
+ */
 public class Server {
 	protected HashMap<Integer, Service> idToServiceMap;
 	protected Socket designatedSocket;
@@ -24,7 +29,11 @@ public class Server {
 	protected String ipAddress;
 	protected final int bufferSize = 2048;
 	protected byte[] buffer;
-	
+	/**
+	 * Class constructor of Server	
+	 * @param socket - socket object used to send and receive messages
+	 * @throws SocketException
+	 */
 	public Server(Socket socket) throws SocketException{
 		this.idToServiceMap = new HashMap<>();
 		this.designatedSocket = socket;
@@ -33,6 +42,11 @@ public class Server {
 		
 	}
 	
+	/**
+	 * Add a service to the hashmap containing all services
+	 * @param id - Service ID
+	 * @param service - Type of service
+	 */
 	public void addServiceToServer(int id, Service service){
 		if(!this.idToServiceMap.containsKey(id)){
 			this.idToServiceMap.put(id, service);
@@ -43,6 +57,9 @@ public class Server {
 		}		
 	}
 	
+	/**
+	 * Server starts listening for incoming request once called
+	 */
 	@SuppressWarnings("finally")
 	public void start(){
 		while(true){
@@ -74,6 +91,11 @@ public class Server {
 		}
 	}
 	
+	/**
+	 * Listen for incoming messages
+	 * @return DatagramPacket with new message
+	 * @throws IOException
+	 */
 	public DatagramPacket receive() throws IOException{
 		Arrays.fill(buffer, (byte) 0);	//empty buffer
 		DatagramPacket p = new DatagramPacket(buffer, buffer.length);
@@ -83,12 +105,25 @@ public class Server {
 		return p;
 	}
 	
+	/**
+	 * Used to simulate packet loss when sending
+	 * @param probability - probability of message being sent out
+	 */
 	public void useSendingLossSocket(double probability){
 		this.designatedSocket = new SendingLossSocket(this.designatedSocket, probability);
 	}
+	/**
+	 * Used to simulate packet loss when receiving
+	 * @param probability - probability message is received
+	 */
 	public void useReceivingLossSocket(double probability){
 		this.designatedSocket = new ReceivingLossSocket(this.designatedSocket, probability);
 	}
+	
+	/**
+	 * Used to create corrupted messages to be sent or received. 
+	 * @param probability - probability messages are corrupted
+	 */
 	public void useCorruptedSocket(double probability){
 		this.designatedSocket = new CorruptedSocket(this.designatedSocket, probability);
 	}
