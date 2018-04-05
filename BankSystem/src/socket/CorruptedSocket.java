@@ -24,18 +24,22 @@ public class CorruptedSocket extends WrapperSocket{
 	
 	@Override
 	public void send(BytePacker msg, InetAddress address, int port) throws IOException {
-		if(random.nextDouble()<probability){
-			byte[] msgByte = msg.getByteArray();
+		byte[] msgByte = msg.getByteArray();
+		if(random.nextDouble()>probability){	
+			Console.debug("sending corrupted data");
 			corruptData(msgByte);
-			NormalSocket socket = (NormalSocket) (this.getSocket());
-			DatagramPacket p = new DatagramPacket(msgByte, msgByte.length,address, port);
-			socket.send(p);
 		}
+		NormalSocket socket = (NormalSocket) (this.getSocket());
+		DatagramPacket p = new DatagramPacket(msgByte, msgByte.length,address, port);
+		socket.send(p);
 	}
 	@Override
     public void receive(DatagramPacket p) throws IOException {
         super.receive(p);
-        if (random.nextDouble()<probability) corruptData(p.getData());
+        if (random.nextDouble()>probability) {
+        	Console.debug("receiving corrupted data");
+        	corruptData(p.getData());
+        }
     }
 	
 }

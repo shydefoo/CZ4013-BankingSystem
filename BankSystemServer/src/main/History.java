@@ -57,6 +57,9 @@ public class History {
 		}
 		public BytePacker searchForDuplicateRequest(int messageId){
 			BytePacker reply = this.messageIdToReplyMap.get(messageId);
+			if(reply!=null){
+				Console.debug("Request already serviced. Resending reply");
+			}
 			return reply;
 		}
 		public void addServicedReqToMap(int messageId, BytePacker replyToServicedReq) {

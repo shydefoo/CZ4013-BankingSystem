@@ -36,8 +36,9 @@ public class Application {
 			//Console.debug_info = false;
 			/*Specify what type of socket to use*/
 			int socketType = console.askForInteger(1, 4, "Select Socket Type: \n1)Normal Socket\n2)SendingLossSocket\n3)ReceivingLossSocket\n4)CorruptedSocket");
-			 if(socketType!=1){
-				 double probability = 1 - console.askForDouble(0.0, 1.0, "Probability of packetloss:");
+			if(socketType!=1){
+				 double probability = 1.0 - console.askForDouble(0.0, 1.0, "Probability of packetloss:");
+				 //System.out.println("socketType:" + socketType);
 				 if(socketType == 2){
 					 client.useSendingLossSocket(probability);
 				 } 
@@ -47,9 +48,7 @@ public class Application {
 					 client.useCorruptedSocket(probability);
 				 }
 			 }	
-			double probability = 0.5;
-			//client.useReceivingLossSocket(probability);
-			client.useSendingLossSocket(probability);
+
 			
 			while(true){
 				client.printMenu();

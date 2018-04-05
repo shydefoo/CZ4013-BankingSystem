@@ -1,5 +1,6 @@
 package services;
 
+import java.io.IOException;
 import java.net.InetAddress;
 
 import message.BytePacker;
@@ -42,7 +43,7 @@ public abstract class Service {
 		return STATUS;
 	}
 	
-	public abstract BytePacker handleService(InetAddress clientAddress, int clientPortNumber, byte[] dataFromClient, Socket socket);
+	public abstract BytePacker handleService(InetAddress clientAddress, int clientPortNumber, byte[] dataFromClient, Socket socket) throws IOException, NullPointerException;
 	public abstract String ServiceName();
 
 	public ByteUnpacker getUnpacker() {

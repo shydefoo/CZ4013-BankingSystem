@@ -88,11 +88,14 @@ public class CallbackHandlerClass implements Runnable {
 		try {
 			checkValidity();
 			if(((OneByteInt)msg.getPropToValue().get(Service.getStatus())).getValue()==0){ //Only if reply status is 0, then broadcast out. 
-				Console.debug("Sending packets to subscribers:");
-				for (Subscriber s: allTheSubscribers){
-					msg.getPropToValue().put(Service.getMessageId(), s.messageId); //replace msgId of reply to whoever that made the action of with msgId of subscriber.
-					designatedSocket.send(msg, s.address, s.portNumber);
+				if(!allTheSubscribers.isEmpty()){
+					Console.debug("Sending packets to subscribers:");
+					for (Subscriber s: allTheSubscribers){
+						msg.getPropToValue().put(Service.getMessageId(), s.messageId); //replace msgId of reply to whoever that made the action of with msgId of subscriber.
+						designatedSocket.send(msg, s.address, s.portNumber);
+					}
 				}
+				
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

@@ -42,34 +42,41 @@ public class Server {
 		}		
 	}
 	
-	public void start() throws IOException{
+	@SuppressWarnings("finally")
+	public void start(){
 		while(true){
-			DatagramPacket p = receive(); 
-			if(p.getLength()!=0){
-				byte[] data = p.getData();
-				InetAddress clientAddress = p.getAddress();
-				int clientPortNumber = p.getPort();
-				//Service ID from client is the first byte in the byte array sent from client
-				int serviceRequested = data[0];
-				Service service = null;
-				if(idToServiceMap.containsKey(serviceRequested)){
-					service = idToServiceMap.get(serviceRequested);
-					System.out.println("Service Requested: " + service.ServiceName());
-					BytePacker replyToRequest = service.handleService(clientAddress,clientPortNumber, data, this.designatedSocket);
-					this.designatedSocket.send(replyToRequest, clientAddress, clientPortNumber);		
-					
-				}	
-			}else{
-				Console.debug("Nothing received");
-			}
-					
+			try{
+				DatagramPacket p = receive(); 
+				if(p.getLength()!=0){
+					byte[] data = p.getData();
+					InetAddress clientAddress = p.getAddress();
+					int clientPortNumber = p.getPort();
+					//Service ID from client is the first byte in the byte array sent from client
+					int serviceRequested = data[0];
+					Service service = null;
+					if(idToServiceMap.containsKey(serviceRequested)){
+						service = idToServiceMap.get(serviceRequested);
+						System.out.println("Service Requested: " + service.ServiceName());
+						BytePacker replyToRequest = service.handleService(clientAddress,clientPortNumber, data, this.designatedSocket);
+						this.designatedSocket.send(replyToRequest, clientAddress, clientPortNumber);					
+					}	
+				}
+			}catch(IOException e){
+				e.printStackTrace();
+				
+			}catch(NullPointerException e){
+				Console.debug("Received corrupted data");
+				e.printStackTrace();
+			}finally{
+				continue;
+			}	
 		}
 	}
 	
 	public DatagramPacket receive() throws IOException{
 		Arrays.fill(buffer, (byte) 0);	//empty buffer
 		DatagramPacket p = new DatagramPacket(buffer, buffer.length);
-		System.out.println("Waiting for request...");
+		//System.out.println("Waiting for request...");
 		this.designatedSocket.receive(p);
 		
 		return p;
