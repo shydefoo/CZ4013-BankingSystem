@@ -8,6 +8,11 @@ import message.OneByteInt;
 import services.CallbackHandlerClass.Subscriber;
 import socket.Socket;
 
+/**
+ * This class handles requests to subscribe to the callback service. 
+ * @author Shide
+ *
+ */
 public class RegisterCallbackService extends Service {
 	
 	protected final static String TIMEOUT = "timeout";

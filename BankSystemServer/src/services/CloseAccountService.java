@@ -10,12 +10,22 @@ import message.ByteUnpacker;
 import message.OneByteInt;
 import socket.Socket;
 
+/**
+ * This class handles requests to check the remaining close an account. 
+ * @author Shide
+ *
+ */
 public class CloseAccountService extends Service {
 	protected final static String NAME = "Name";
 	protected final static String PIN = "Pin";
 	protected final static String ACCNUM = "accNum";
 	private CallbackHandlerClass callbackHandler;
-	//private CallbackHandlerClass callbackHandler;
+
+	/**
+	 * Class constructor for CloseAccountService
+	 * @param callbackHandler Callbackhandler instance to handle callback service for clients that subscribe to
+	 * this service
+	 */
 	public CloseAccountService(CallbackHandlerClass callbackHandler){
 		super(new ByteUnpacker.Builder()
 						.setType(NAME, ByteUnpacker.TYPE.STRING)
