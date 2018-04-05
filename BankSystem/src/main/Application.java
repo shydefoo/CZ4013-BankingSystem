@@ -34,9 +34,9 @@ public class Application {
 			
 			//Console.debug_info = false;
 			/*Specify what type of socket to use*/
-			//double probability = 0.5;
+			double probability = 0.5;
 			//client.useReceivingLossSocket(probability);
-			//client.useSendingLossSocket(probability);
+			client.useSendingLossSocket(probability);
 			
 			while(true){
 				client.printMenu();

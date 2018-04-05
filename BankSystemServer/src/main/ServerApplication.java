@@ -5,6 +5,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.util.Scanner;
 
 import bank.Bank;
 import services.BalanceTransfer;
@@ -25,22 +26,39 @@ public class ServerApplication {
 	private static Socket socket;
 	private static final int PORT_NUMBER = 8000;
 	public static void main(String[] args){
+		Console console = new Console(new Scanner(System.in));
 		try {
 			System.out.println("Starting server");
 			bank = new Bank();
-			address = InetAddress.getByName("127.0.0.1");
-			socket = new NormalSocket(new DatagramSocket(PORT_NUMBER,address));
-			//Console.debug_info = false;
 			
-			/*Specify type of server*/
-			//server = new Server(socket); //at-least-once server 
-			server = new AtMostOnceServer(socket); //at-most-once server
+			/*Start of code to set server configurations*/
+			String addressInput = console.askForString("Input IP address hosting server on:");
+			address = InetAddress.getByName(addressInput);
+			
 			
 			/*Specify what type of socket to use*/
-			//double probability = 0.5;
-			//server.useSendingLossSocket(probability);
-			
-			
+			int socketType = console.askForInteger(1, 3, "Select Socket Type: \n1)Normal Socket\n2)ReceivingLossSocket\n3)SendingLossSocket");
+			 if(socketType==1){
+				 socket = new NormalSocket(new DatagramSocket(PORT_NUMBER,address));
+			 }else {
+				 double probability = console.askForDouble(0.0, 1.0, "Probability of packetloss:");
+				 if(socketType == 2){
+					 server.useReceivingLossSocket(probability);
+				 } 
+				 else if(socketType==3){
+					 server.useSendingLossSocket(probability);
+				 }
+			 }			
+			//Console.debug_info = false;		
+			/*Specify type of server*/
+			int serverChoice = console.askForInteger(1, 2, "Select Server type: \n1)At-Least-Once\n2)At-Most-Once");
+			if(serverChoice==1){
+				server = new Server(socket); //at-least-once server
+			}
+			else if(serverChoice==2){
+				server = new AtMostOnceServer(socket); //at-most-once server
+			}
+			/*End of code to set server configurations*/	
 			
 			callbackHandler = new CallbackHandlerClass(socket);
 			Thread validityCheck = new Thread(callbackHandler);
@@ -53,7 +71,6 @@ public class ServerApplication {
 			server.addServiceToServer(4, new RegisterCallbackService(callbackHandler));
 			server.addServiceToServer(5, new CheckBalanceService(callbackHandler));
 			////////////////
-			
 			server.start();
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
@@ -64,4 +81,5 @@ public class ServerApplication {
 		} 
 		
 	}
+	
 }

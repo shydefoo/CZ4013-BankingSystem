@@ -44,7 +44,7 @@ public class Server {
 	
 	public void start() throws IOException{
 		while(true){
-			DatagramPacket p = receive(); /*Create DatagramPacket to receive requests from clients, assumes that it has no problem receiving.*/
+			DatagramPacket p = receive(); 
 			if(p.getLength()!=0){
 				byte[] data = p.getData();
 				InetAddress clientAddress = p.getAddress();

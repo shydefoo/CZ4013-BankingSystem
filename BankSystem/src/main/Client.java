@@ -33,7 +33,7 @@ public class Client {
 	private int serverPortNumber;
 	private InetAddress InetIpAddress = null;
 	private int message_id;
-	private int timeout = 0;
+	private int timeout;
 	//buffer
     private byte[] buffer = new byte[BUFFER_SIZE];
 	

@@ -34,15 +34,12 @@ public class History {
 		return newClient;
 	}
 	
+
+	
+	
 	/**
-	 * Searches if hashmap in client object contains a request with the same messageId. (if same messageId means duplicate request)
-	 * @param client
-	 * @param messageId
-	 * @return
+	 * Represents each client that has sent the server a request before. 
 	 */
-	
-	
-	
 	public class Client{
 		private InetAddress address;
 		private int portNumber;
