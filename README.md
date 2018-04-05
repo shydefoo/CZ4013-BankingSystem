@@ -79,3 +79,6 @@ Example of console when starting client:
 * Enter service request: 
 
 
+Foo Shide
+Davin Widjaya
+Peck Jing Heng
