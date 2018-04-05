@@ -29,7 +29,6 @@ public class Server {
 		this.designatedSocket = socket;
 		this.buffer = new byte[bufferSize];
 		
-		
 	}
 	
 	public void addServiceToServer(int id, Service service){

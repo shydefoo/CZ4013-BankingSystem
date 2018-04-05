@@ -34,6 +34,7 @@ public class AtMostOnceServer extends Server {
 				Service service = null;
 				if(idToServiceMap.containsKey(serviceRequested)){
 					service = idToServiceMap.get(serviceRequested);
+					System.out.println("Service Requested: " + service.ServiceName());
 					ByteUnpacker.UnpackedMsg unpackedMsg = service.getUnpacker().parseByteArray(data);
 					int messageId = unpackedMsg.getInteger(Service.getMessageId());
 					Client client = history.findClient(clientAddress, clientPortNumber);
