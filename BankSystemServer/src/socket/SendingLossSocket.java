@@ -30,7 +30,7 @@ public class SendingLossSocket extends WrapperSocket {
 	 * 
 	 */
 	public void send(BytePacker msg, InetAddress address, int port) throws IOException {
-		if(random.nextDouble()<1-probability){
+		if(random.nextDouble()<probability){
 			super.send(msg, address, port);
 		}
 		else{
