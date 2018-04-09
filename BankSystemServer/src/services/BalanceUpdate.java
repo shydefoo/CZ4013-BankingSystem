@@ -72,7 +72,7 @@ public class BalanceUpdate extends Service {
 			} 
 			else if(choice==0){
 				choiceType = "Withdraw Funds";
-				choiceType = "Amount Withdrawn";
+				choiceType2 = "Amount Withdrawn";
 			}
 			reply = String.format("---------------------\n%s \n%s: %f \nCurrent account balance: %f\n------------------" ,choiceType, choiceType2, amount, accBalance);
 			BytePacker replyMessageSubscriber = super.generateReply(status, messageId, reply);
