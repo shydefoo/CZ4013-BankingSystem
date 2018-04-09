@@ -8,7 +8,7 @@ import java.util.Random;
 import main.Console;
 
 /**
- * Simulate packet loss when receiving
+ * This class simulates packet loss when receiving
  * 
  * @author Shide
  *
@@ -23,6 +23,10 @@ public class ReceivingLossSocket extends WrapperSocket {
 		this.probability = probability;
 	}
 	
+	/**
+	 * Method to call receive depending based on a probability. 
+	 * Higher probability --> higher probability of receiving.
+	 */
 	public void receive(DatagramPacket p) throws IOException, SocketTimeoutException{
 		if(random.nextDouble()<this.probability){
 			super.receive(p);

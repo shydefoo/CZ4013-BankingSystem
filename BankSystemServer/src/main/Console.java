@@ -1,15 +1,17 @@
 package main;
 import java.util.Scanner;
 
-/***
+/**
  * This class is in charged of printing results on the console.
+ * @author Shide
+ *
  */
 public class Console {
 	private Scanner scanner;
 	static boolean debug_info = true;
 	
 	/**
-	 * Class constructor for Console 
+	 * Class constructor of Console 
 	 * @param scanner
 	 */
 	public Console(Scanner scanner) {

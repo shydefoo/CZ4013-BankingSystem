@@ -35,6 +35,11 @@ public class BytePacker {
 		propToValue.put(key,value);
 	}
 	
+	/**
+	 * Return lookup value from key in hashmap
+	 * @param key - key to lookup in hashmap
+	 * @return value
+	 */
 	public Object getValue(String key){
 		return propToValue.get(key);
 	}

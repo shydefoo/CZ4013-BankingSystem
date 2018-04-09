@@ -11,7 +11,7 @@ import message.OneByteInt;
 import socket.Socket;
 
 /**
- * This class handles requests to check the remaining close an account. 
+ * This class handles requests to close an account. 
  * @author Shide
  *
  */

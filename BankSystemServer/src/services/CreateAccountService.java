@@ -10,7 +10,7 @@ import message.OneByteInt;
 import socket.Socket;
 
 /**
- * This class handles requests to check the remaining close an account. 
+ * This class handles requests to create an account. 
  * @author Shide
  *
  */
@@ -20,7 +20,12 @@ public class CreateAccountService extends Service {
 	protected final static String CURRENCY = "Currency";
 	protected final static String BALANCE = "Balance";
 	private CallbackHandlerClass callbackHandler;
-	//private CallbackHandlerClass callbackHandler;
+
+	/**
+	 * Class constructor for CloseAccountService
+	 * @param callbackHandler Callbackhandler instance to handle callback service for clients that subscribe to
+	 * this service
+	 */
 	public CreateAccountService(CallbackHandlerClass callbackHandler){
 		super(new ByteUnpacker.Builder()
 						.setType(NAME, ByteUnpacker.TYPE.STRING)

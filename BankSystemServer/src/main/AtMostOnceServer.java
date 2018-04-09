@@ -13,7 +13,7 @@ import services.Service;
 import socket.Socket;
 /**
  * Server with at-most-once semantics applied
- * 
+ * @author Shide
  *
  */
 public class AtMostOnceServer extends Server {

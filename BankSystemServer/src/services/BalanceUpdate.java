@@ -9,6 +9,10 @@ import message.ByteUnpacker;
 import message.OneByteInt;
 import socket.Socket;
 
+/**
+ * This class handles Balance Update requests (i.e. deposit and withdraw request)
+ *
+ */
 public class BalanceUpdate extends Service {
 	protected final static String NAME = "Name";
 	protected final static String ACCNUM = "accNum";
@@ -16,6 +20,12 @@ public class BalanceUpdate extends Service {
 	protected final static String CHOICE = "choice";
 	protected final static String AMOUNT = "amount";
 	private CallbackHandlerClass callbackHandler;
+	
+	/**
+	 * Class constructor for BalanceUpdate
+	 * @param callbackHandler Callbackhandler instance to handle callback service for clients that subscribe to
+	 * this service
+	 */
 	public BalanceUpdate(CallbackHandlerClass callbackHandler){
 		super(new ByteUnpacker.Builder()
 						.setType(NAME, ByteUnpacker.TYPE.STRING)
@@ -54,7 +64,17 @@ public class BalanceUpdate extends Service {
 			reply = "Invalid Choice. Please try again";
 		}
 		else{
-			reply = String.format("---------------------\nWithdraw funds  \nAmount Withdrawn: %f \nCurrent account balance: %f\n------------------" , amount, accBalance);
+			String choiceType = "";
+			String choiceType2 = "";
+			if(choice == 1){
+				choiceType = "Deposit Funds";
+				choiceType2 = "Amount Deposited";
+			} 
+			else if(choice==0){
+				choiceType = "Withdraw Funds";
+				choiceType = "Amount Withdrawn";
+			}
+			reply = String.format("---------------------\n%s \n%s: %f \nCurrent account balance: %f\n------------------" ,choiceType, choiceType2, amount, accBalance);
 			BytePacker replyMessageSubscriber = super.generateReply(status, messageId, reply);
 			callbackHandler.broadcast(replyMessageSubscriber);
 		}

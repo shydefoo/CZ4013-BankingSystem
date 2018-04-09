@@ -29,7 +29,6 @@ public class NormalSocket implements Socket {
 
 	@Override
 	public void receive (DatagramPacket p) throws IOException {
-		// TODO Auto-generated method stub
 		this.socket.receive(p);
 		Console.debug("Receiving message from server");
 		return;
@@ -38,7 +37,6 @@ public class NormalSocket implements Socket {
 	@Override
 	public void close() {
 		Console.debug("Closing socket");
-		// TODO Auto-generated method stub
 		this.socket.close();
 		return;
 	}

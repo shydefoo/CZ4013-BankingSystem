@@ -10,6 +10,7 @@ import message.BytePacker;
 
 /**
  * History of clients to perform at-most-once semantics. 
+ * @author Shide
  *
  */
 public class History {

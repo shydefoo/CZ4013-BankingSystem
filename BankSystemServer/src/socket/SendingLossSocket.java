@@ -9,7 +9,7 @@ import message.BytePacker;
 
 /**
  * 
- * Simulate packet loss when sending packets out, based on a defined probability
+ * This class simulates packet loss when sending packets out, based on a defined probability
  * @author Shide
  *
  */
