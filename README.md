@@ -79,6 +79,4 @@ Example of console when starting client:
 * Enter service request: 
 
 
-Foo Shide
-Davin Widjaya
-Peck Jing Heng
+Followed this guy's architecture for a similar project - https://github.com/tanhauhau/Bueno4013 
